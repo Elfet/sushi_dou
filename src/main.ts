@@ -14,3 +14,5 @@ const config: Phaser.Types.Core.GameConfig = {
   scene: MyScene,
 };
 new Phaser.Game(config);
+
+console.log('change')
