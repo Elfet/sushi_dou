@@ -8,10 +8,11 @@ const config: Phaser.Types.Core.GameConfig = {
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 200 },
+      // gravity: { y: 200 },
     },
   },
   scene: MyScene,
+  pixelArt: true,
 };
 new Phaser.Game(config);
 

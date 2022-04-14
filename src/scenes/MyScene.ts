@@ -1,4 +1,7 @@
+
 import Phaser from "phaser";
+
+let npc_0: any;
 
 export class MyScene extends Phaser.Scene {
   constructor() {
@@ -6,30 +9,65 @@ export class MyScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.setBaseURL("https://labs.phaser.io");
-
-    this.load.image("sky", "assets/skies/space3.png");
-    this.load.image("logo", "assets/sprites/phaser3-logo.png");
-    this.load.image("red", "assets/particles/red.png");
+    this.load.image("map", "src/assets/maps/map_01.png");
+    this.load.image("counter_table", "src/assets/maps/counter_table.png");
+    this.load.spritesheet('npc_0', 'src/assets/characters/Chef_Alex_48x48.png', { frameWidth: 48, frameHeight: 96 });
   }
 
+  
+
   create() {
-    this.add.image(400, 300, "sky");
+    this.add.image(400, 300, "map").setScale(1.5);
+    this.add.image(400, 339, "counter_table").setScale(1.5);
 
-    const particles = this.add.particles("red");
-
-    const emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: "ADD",
+    // npc
+    npc_0 = this.physics.add.sprite(400, 300, 'npc_0');
+    // npcのアニメーション
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('npc_0', { start: 60, end: 65 }),
+      frameRate: 10,
+      repeat: -1
     });
 
-    const logo = this.physics.add.image(400, 100, "logo");
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('npc_0', { start: 48, end: 53 }),
+      frameRate: 10,
+      repeat: -1
+    });
 
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
+    this.anims.create({
+      key: 'down',
+      frames: this.anims.generateFrameNumbers('npc_0', { start: 66, end: 71 }),
+      frameRate: 10,
+      repeat: -1
+    });
 
-    emitter.startFollow(logo);
+    this.anims.create({
+      key: 'up',
+      frames: this.anims.generateFrameNumbers('npc_0', { start: 54, end: 59 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'sit',
+      frames: [ { key: 'npc_0', frame: 2 } ],
+      frameRate: 20
+    });
+
+    console.log(npc_0)
+
+  }
+
+  update () {
+    // npc_0.setVelocityX(160);
+    // npc_0.anims.play('right', true);
+  }
+
+  npcAnimate () {
+    console.log(this)
+    console.log("hello")
   }
 }
