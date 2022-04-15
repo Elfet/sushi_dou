@@ -5,17 +5,10 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 800,
   height: 600,
+  pixelArt: true,
   physics: {
-    default: "arcade",
-    arcade: {
-      // gravity: { y: 200 },
-    },
+    default: "arcade"
   },
   scene: MyScene,
-  pixelArt: true,
 };
 new Phaser.Game(config);
-
-console.log('change')
-
-console.log("change from feature/test branch")
