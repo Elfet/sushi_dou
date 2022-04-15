@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { MyScene } from "./scenes/MyScene";
-import { PhaserMatterCollisionPlugin } from 'phaser-matter-collision-plugin';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -10,15 +9,6 @@ const config: Phaser.Types.Core.GameConfig = {
   physics: {
     default: "arcade"
   },
-  // plugins: {
-  //   scene: [
-  //     {
-  //       plugin: PhaserMatterCollisionPlugin,
-  //       key: 'matterCollision',
-  //       mapping: 'matterCollision'
-  //     }
-  //   ]
-  // },
   scene: MyScene,
 };
 new Phaser.Game(config);
