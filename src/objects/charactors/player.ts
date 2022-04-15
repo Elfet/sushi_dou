@@ -1,8 +1,8 @@
-export class Player{
-	public player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+export class Player {
+	private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 	private physics: Phaser.Physics.Arcade.ArcadePhysics;
 	private anims: Phaser.Animations.AnimationManager;
-	private playerDirection: string;
+	private playerDirection: string = 'down';
 	private standFrameRate: number = 7;
 	private walkFrameRate: number = 7;
 
@@ -12,10 +12,10 @@ export class Player{
 		spawnX: number,
 		spawnY: number,
 		playerName: string,
-	){
+	)
+  {
 		this.physics = physics;
 		this.anims = anims;
-		this.playerDirection = 'down';
 		this.player = this.physics.add.sprite(spawnX, spawnY, playerName).setScale(1.5);
 		this.player.setCollideWorldBounds(true);
 
@@ -76,11 +76,11 @@ export class Player{
     });
 	}
 
-	setCollider(object: Phaser.Physics.Arcade.StaticGroup) {
+	setCollider(object: Phaser.Physics.Arcade.StaticGroup): void {
 		this.physics.add.collider(this.player, object)
 	}
 
-	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 1000) {
+	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 1000): void {
 		if (cursors.left.isDown) {
       this.player.setVelocityX(-1 * speed);
       this.player.setVelocityY(0);
@@ -122,7 +122,7 @@ export class Player{
     }
 	}
 
-
-
-
+  getPlayerPosition(): [number, number] {
+    return [ this.player.x, this.player.y ]
+  }
 }
