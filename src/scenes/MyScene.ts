@@ -12,12 +12,14 @@ export class MyScene extends Phaser.Scene {
   private npc_0! : Npc;
   private npc_1! : Npc;
   private npc_2! : Npc;
+  private npc_3! : Npc;
+  private npc_4! : Npc;
+  private npc_5! : Npc;
+  private npc_6! : Npc;
   private chair_0! : Chair;
   private chair_1! : Chair;
   private chair_2! : Chair;
-  private npcAnimation_0! : NpcAnim; 
-  private npcAnimation_1! : NpcAnim; 
-  private npcAnimation_2! : NpcAnim;
+  private npcAnimation! : NpcAnim; 
   private egg!: Food;
   private salmon!: Food;
   private shrimp!: Food;
@@ -42,7 +44,11 @@ export class MyScene extends Phaser.Scene {
       { frameWidth: 48, frameHeight: 96}
     );
     this.load.image("chair", "src/assets/maps/chair.png");
-    this.load.spritesheet('npc_0', 'src/assets/characters/Chef_Alex_48x48.png', { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_0', 'src/assets/characters/npc_female_0.png', { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_1', 'src/assets/characters/npc_female_1.png', { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_2', 'src/assets/characters/npc_male_0.png', { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_3', 'src/assets/characters/npc_male_1.png', { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_4', 'src/assets/characters/npc_male_2.png', { frameWidth: 48, frameHeight: 96 });
   }
 
   create() {
@@ -71,15 +77,38 @@ export class MyScene extends Phaser.Scene {
     this.chair_2 = new Chair(this.add, 600, 370, 'chair');
 
     
-    // npc
+    // npc生成
     this.npc_0 = new Npc(this.add, this.anims, 'npc_0');
-    this.npc_1 = new Npc(this.add, this.anims, 'npc_0');
-    this.npc_2 = new Npc(this.add, this.anims, 'npc_0');
+    this.npc_0.sprite.play({key: 'walk_right', repeat: -1});
+    this.npc_1 = new Npc(this.add, this.anims, 'npc_1');
+    this.npc_2 = new Npc(this.add, this.anims, 'npc_2');
+    this.npc_3 = new Npc(this.add, this.anims, 'npc_3');
+    this.npc_4 = new Npc(this.add, this.anims, 'npc_4');
+    this.npc_5 = new Npc(this.add, this.anims, 'npc_5');
+    this.npc_6 = new Npc(this.add, this.anims, 'npc_6');
 
     // npcのアニメーション
-    this.npcAnimation_0 = new NpcAnim(this.npc_0.sprite, this.chair_0.image, this.tweens, this.add, this.input, 'chair_0');
-    this.npcAnimation_1 = new NpcAnim(this.npc_1.sprite, this.chair_1.image, this.tweens, this.add, this.input, 'chair_1');
-    this.npcAnimation_2 = new NpcAnim(this.npc_2.sprite, this.chair_2.image, this.tweens, this.add, this.input, 'chair_2');
+    this.npcAnimation = new NpcAnim(
+      this.npc_0.sprite,
+      this.npc_1.sprite,
+      this.npc_2.sprite,
+      this.npc_3.sprite,
+      this.npc_4.sprite,
+      this.npc_5.sprite,
+      this.npc_6.sprite,
+      this.npc_0.npcName,
+      this.npc_1.npcName,
+      this.npc_2.npcName,
+      this.npc_3.npcName,
+      this.npc_4.npcName,
+      this.npc_5.npcName,
+      this.npc_6.npcName,
+      this.chair_0.image,
+      this.chair_1.image,
+      this.chair_2.image,
+      this.tweens,
+      this.add,
+    );
 
   }
 
@@ -88,9 +117,7 @@ export class MyScene extends Phaser.Scene {
     this.player.onDownPlayerBehavior(this.cursors);
     // foodのstate check
     this.checkFoodSelected()
-    this.npcAnimation_0.triggerNpcAnim();
-    this.npcAnimation_1.triggerNpcAnim();
-    this.npcAnimation_2.triggerNpcAnim();
+    this.npcAnimation.triggerNpcAnim();
   }
 
   checkFoodSelected() {
