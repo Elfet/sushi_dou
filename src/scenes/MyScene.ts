@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-import { Npc } from "./npc";
-import { NpcAnim } from "./npcAnimation";
+import { Npc } from "../objects/charactors/npc";
 import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
 
@@ -8,25 +7,46 @@ export class MyScene extends Phaser.Scene {
   private player!: Player;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private staticInterior!: Phaser.Physics.Arcade.StaticGroup;
-  private npc_0! : Npc;
-  private npc_1! : Npc;
-  private npc_2! : Npc;
-  private npc_3! : Npc;
-  private npc_4! : Npc;
-  private npc_5! : Npc;
-  private npc_6! : Npc;
-  private chair_0! : Phaser.GameObjects.Image;
-  private chair_1! : Phaser.GameObjects.Image;
-  private chair_2! : Phaser.GameObjects.Image;
-  private npcAnimation! : NpcAnim; 
+  private npc_0!: Npc;
+  private npc_1!: Npc;
+  private npc_2!: Npc;
+  private npc_3!: Npc;
+  private npc_4!: Npc;
+  private npc_5!: Npc;
+  private npc_6!: Npc;
+  private chair_0!: Phaser.GameObjects.Image;
+  private chair_1!: Phaser.GameObjects.Image;
+  private chair_2!: Phaser.GameObjects.Image;
   private egg!: Food;
   private salmon!: Food;
   private shrimp!: Food;
   private tuna!: Food;
   private rice!: Food;
+  // 椅子の状態を管理
+  public isChair0Taken: boolean;
+  public isChair1Taken: boolean;
+  public isChair2Taken: boolean;
+  // npcの状態を管理
+  public isNpc0Visible: boolean;
+  public isNpc1Visible: boolean;
+  public isNpc2Visible: boolean;
+  public isNpc3Visible: boolean;
+  public isNpc4Visible: boolean;
+  public isNpc5Visible: boolean;
+  public isNpc6Visible: boolean;
 
   constructor() {
     super({ key: 'myscene' });
+    this.isChair0Taken = false;
+    this.isChair1Taken = false;
+    this.isChair2Taken = false;
+    this.isNpc0Visible = false;
+    this.isNpc1Visible = false;
+    this.isNpc2Visible = false;
+    this.isNpc3Visible = false;
+    this.isNpc4Visible = false;
+    this.isNpc5Visible = false;
+    this.isNpc6Visible = false;
   }
 
   preload() {
@@ -78,38 +98,135 @@ export class MyScene extends Phaser.Scene {
     this.chair_2 = this.add.image(600, 370, 'chair').setScale(1.5);
     
     // npc生成
-    this.npc_0 = new Npc(this.add, 'npc_0');
-    this.npc_1 = new Npc(this.add, 'npc_1');
-    this.npc_2 = new Npc(this.add, 'npc_2');
-    this.npc_3 = new Npc(this.add, 'npc_3');
-    this.npc_4 = new Npc(this.add, 'npc_4');
-    this.npc_5 = new Npc(this.add, 'npc_5');
-    this.npc_6 = new Npc(this.add, 'npc_6');
-
-    // npcのアニメーション
-    this.npcAnimation = new NpcAnim(
-      this.npc_0.sprite,
-      this.npc_1.sprite,
-      this.npc_2.sprite,
-      this.npc_3.sprite,
-      this.npc_4.sprite,
-      this.npc_5.sprite,
-      this.npc_6.sprite,
-      this.chair_0,
-      this.chair_1,
-      this.chair_2,
-      this.tweens,
-      this.add,
-    );
-
+    this.npc_0 = new Npc(this.add, 'npc_0', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_1 = new Npc(this.add, 'npc_1', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_2 = new Npc(this.add, 'npc_2', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_3 = new Npc(this.add, 'npc_3', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_4 = new Npc(this.add, 'npc_4', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_5 = new Npc(this.add, 'npc_5', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_6 = new Npc(this.add, 'npc_6', this.chair_0, this.chair_1, this.chair_2, this.tweens);
   }
 
   update () {
     // playerの行動
     this.player.onDownPlayerBehavior(this.cursors);
     // foodのstate check
-    this.checkFoodSelected()
-    this.npcAnimation.triggerNpcAnim();
+    this.checkFoodSelected();
+    // Npcのアニメーション
+    this.updateNpcAnimation('chair_0');
+    this.updateNpcAnimation('chair_1');
+    this.updateNpcAnimation('chair_2');
+  }
+
+  updateNpcAnimation(chair: string):void {
+    if (chair === 'chair_0' && !this.isChair0Taken) {
+      this.isChair0Taken = true;
+      setTimeout(()=>{
+        this.isChair0Taken = false;
+      }, 7500)
+      if (!this.isNpc0Visible) {
+        this.isNpc0Visible = true;
+        this.npc_0.updateAnimation('chair_0');
+      } else if (!this.isNpc1Visible) {
+        this.isNpc1Visible = true;
+        this.npc_1.updateAnimation('chair_0');
+      } else if (!this.isNpc2Visible) {
+        this.isNpc2Visible = true;
+        this.npc_2.updateAnimation('chair_0');
+      } else if (!this.isNpc3Visible) {
+        this.isNpc3Visible = true;
+        this.npc_3.updateAnimation('chair_0');
+      } else if (!this.isNpc4Visible) {
+        this.isNpc4Visible = true;
+        this.npc_4.updateAnimation('chair_0');
+      } else if (!this.isNpc5Visible) {
+        this.isNpc5Visible = true;
+        this.npc_5.updateAnimation('chair_0');
+      } else if (!this.isNpc6Visible) {
+        this.isNpc6Visible = true;
+        this.npc_6.updateAnimation('chair_0');
+      } else {
+        this.isNpc0Visible = false;
+        this.isNpc1Visible = false;
+        this.isNpc2Visible = false;
+        this.isNpc3Visible = false;
+        this.isNpc4Visible = false;
+        this.isNpc5Visible = false;
+        this.isNpc6Visible = false;
+      }
+    } 
+    if (chair === 'chair_1' && !this.isChair1Taken) {
+      this.isChair1Taken = true;
+      setTimeout(()=>{
+        this.isChair1Taken = false;
+      }, 6000)
+      if (!this.isNpc0Visible) {
+        this.isNpc0Visible = true;
+        this.npc_0.updateAnimation('chair_1');
+      } else if (!this.isNpc1Visible) {
+        this.isNpc1Visible = true;
+        this.npc_1.updateAnimation('chair_1');
+      } else if (!this.isNpc2Visible) {
+        this.isNpc2Visible = true;
+        this.npc_2.updateAnimation('chair_1');
+      } else if (!this.isNpc3Visible) {
+        this.isNpc3Visible = true;
+        this.npc_3.updateAnimation('chair_1');
+      } else if (!this.isNpc4Visible) {
+        this.isNpc4Visible = true;
+        this.npc_4.updateAnimation('chair_1');
+      } else if (!this.isNpc5Visible) {
+        this.isNpc5Visible = true;
+        this.npc_5.updateAnimation('chair_1');
+      } else if (!this.isNpc6Visible) {
+        this.isNpc6Visible = true;
+        this.npc_6.updateAnimation('chair_1');
+      } else {
+        this.isNpc0Visible = false;
+        this.isNpc1Visible = false;
+        this.isNpc2Visible = false;
+        this.isNpc3Visible = false;
+        this.isNpc4Visible = false;
+        this.isNpc5Visible = false;
+        this.isNpc6Visible = false;
+      }
+    }
+    if (chair === 'chair_2' && !this.isChair2Taken) {
+      this.isChair2Taken = true;
+      setTimeout(()=>{
+        this.isChair2Taken = false;
+      }, 6500)
+      if (!this.isNpc0Visible) {
+        this.isNpc0Visible = true;
+        this.npc_0.updateAnimation('chair_2');
+      } else if (!this.isNpc1Visible) {
+        this.isNpc1Visible = true;
+        this.npc_1.updateAnimation('chair_2');
+      } else if (!this.isNpc2Visible) {
+        this.isNpc2Visible = true;
+        this.npc_2.updateAnimation('chair_2');
+      } else if (!this.isNpc3Visible) {
+        this.isNpc3Visible = true;
+        this.npc_3.updateAnimation('chair_2');
+      } else if (!this.isNpc4Visible) {
+        this.isNpc4Visible = true;
+        this.npc_4.updateAnimation('chair_2');
+      } else if (!this.isNpc5Visible) {
+        this.isNpc5Visible = true;
+        this.npc_5.updateAnimation('chair_2');
+      } else if (!this.isNpc6Visible) {
+        this.isNpc6Visible = true;
+        this.npc_6.updateAnimation('chair_2');
+      } else {
+        this.isNpc0Visible = false;
+        this.isNpc1Visible = false;
+        this.isNpc2Visible = false;
+        this.isNpc3Visible = false;
+        this.isNpc4Visible = false;
+        this.isNpc5Visible = false;
+        this.isNpc6Visible = false;
+      }
+    }
   }
 
   checkFoodSelected() {
