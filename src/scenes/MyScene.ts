@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import { Npc } from "./npc";
-import { Chair } from "./chair";
 import { NpcAnim } from "./npcAnimation";
 import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
@@ -16,9 +15,9 @@ export class MyScene extends Phaser.Scene {
   private npc_4! : Npc;
   private npc_5! : Npc;
   private npc_6! : Npc;
-  private chair_0! : Chair;
-  private chair_1! : Chair;
-  private chair_2! : Chair;
+  private chair_0! : Phaser.GameObjects.Image;
+  private chair_1! : Phaser.GameObjects.Image;
+  private chair_2! : Phaser.GameObjects.Image;
   private npcAnimation! : NpcAnim; 
   private egg!: Food;
   private salmon!: Food;
@@ -74,10 +73,9 @@ export class MyScene extends Phaser.Scene {
     this.player = new Player(this.physics, this.anims, 400, 200, 'player');
     this.player.setCollider(this.staticInterior);
     // 椅子
-    this.chair_0 = new Chair(this.add, 200, 370, 'chair');
-    this.chair_1 = new Chair(this.add, 400, 370, 'chair');
-    this.chair_2 = new Chair(this.add, 600, 370, 'chair');
-
+    this.chair_0 = this.add.image(200, 370, 'chair').setScale(1.5);
+    this.chair_1 = this.add.image(400, 370, 'chair').setScale(1.5);
+    this.chair_2 = this.add.image(600, 370, 'chair').setScale(1.5);
     
     // npc生成
     this.npc_0 = new Npc(this.add, 'npc_0');
@@ -97,9 +95,9 @@ export class MyScene extends Phaser.Scene {
       this.npc_4.sprite,
       this.npc_5.sprite,
       this.npc_6.sprite,
-      this.chair_0.image,
-      this.chair_1.image,
-      this.chair_2.image,
+      this.chair_0,
+      this.chair_1,
+      this.chair_2,
       this.tweens,
       this.add,
     );
