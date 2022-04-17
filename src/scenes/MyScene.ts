@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { Npc } from "../objects/charactors/npc";
+import { Chair } from "../objects/chair";
 import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
 
@@ -14,39 +15,17 @@ export class MyScene extends Phaser.Scene {
   private npc_4!: Npc;
   private npc_5!: Npc;
   private npc_6!: Npc;
-  private chair_0!: Phaser.GameObjects.Image;
-  private chair_1!: Phaser.GameObjects.Image;
-  private chair_2!: Phaser.GameObjects.Image;
+  private chair_0!: Chair;
+  private chair_1!: Chair;
+  private chair_2!: Chair;
   private egg!: Food;
   private salmon!: Food;
   private shrimp!: Food;
   private tuna!: Food;
   private rice!: Food;
-  // 椅子の状態を管理
-  public isChair0Taken: boolean;
-  public isChair1Taken: boolean;
-  public isChair2Taken: boolean;
-  // npcの状態を管理
-  public isNpc0Visible: boolean;
-  public isNpc1Visible: boolean;
-  public isNpc2Visible: boolean;
-  public isNpc3Visible: boolean;
-  public isNpc4Visible: boolean;
-  public isNpc5Visible: boolean;
-  public isNpc6Visible: boolean;
 
   constructor() {
     super({ key: 'myscene' });
-    this.isChair0Taken = false;
-    this.isChair1Taken = false;
-    this.isChair2Taken = false;
-    this.isNpc0Visible = false;
-    this.isNpc1Visible = false;
-    this.isNpc2Visible = false;
-    this.isNpc3Visible = false;
-    this.isNpc4Visible = false;
-    this.isNpc5Visible = false;
-    this.isNpc6Visible = false;
   }
 
   preload() {
@@ -93,18 +72,18 @@ export class MyScene extends Phaser.Scene {
     this.player = new Player(this.physics, this.anims, 400, 200, 'player');
     this.player.setCollider(this.staticInterior);
     // 椅子
-    this.chair_0 = this.add.image(200, 370, 'chair').setScale(1.5);
-    this.chair_1 = this.add.image(400, 370, 'chair').setScale(1.5);
-    this.chair_2 = this.add.image(600, 370, 'chair').setScale(1.5);
+    this.chair_0 = new Chair(200, 370, 'chair', this.add);
+    this.chair_1 = new Chair(400, 370, 'chair', this.add);
+    this.chair_2 = new Chair(600, 370, 'chair', this.add);
     
     // npc生成
-    this.npc_0 = new Npc(this.add, 'npc_0', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_1 = new Npc(this.add, 'npc_1', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_2 = new Npc(this.add, 'npc_2', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_3 = new Npc(this.add, 'npc_3', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_4 = new Npc(this.add, 'npc_4', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_5 = new Npc(this.add, 'npc_5', this.chair_0, this.chair_1, this.chair_2, this.tweens);
-    this.npc_6 = new Npc(this.add, 'npc_6', this.chair_0, this.chair_1, this.chair_2, this.tweens);
+    this.npc_0 = new Npc(this.add, 'npc_0', this.tweens);
+    this.npc_1 = new Npc(this.add, 'npc_1', this.tweens);
+    this.npc_2 = new Npc(this.add, 'npc_2', this.tweens);
+    this.npc_3 = new Npc(this.add, 'npc_3', this.tweens);
+    this.npc_4 = new Npc(this.add, 'npc_4', this.tweens);
+    this.npc_5 = new Npc(this.add, 'npc_5', this.tweens);
+    this.npc_6 = new Npc(this.add, 'npc_6', this.tweens);
   }
 
   update () {
@@ -113,121 +92,81 @@ export class MyScene extends Phaser.Scene {
     // foodのstate check
     this.checkFoodSelected();
     // Npcのアニメーション
-    this.updateNpcAnimation('chair_0');
-    this.updateNpcAnimation('chair_1');
-    this.updateNpcAnimation('chair_2');
+    this.updateNpcAnimation(this.npc_0);
+    this.updateNpcAnimation(this.npc_1);
+    this.updateNpcAnimation(this.npc_2);
+    this.updateNpcAnimation(this.npc_3);
+    this.updateNpcAnimation(this.npc_4);
+    this.updateNpcAnimation(this.npc_5);
+    this.updateNpcAnimation(this.npc_6);
   }
 
-  updateNpcAnimation(chair: string):void {
-    if (chair === 'chair_0' && !this.isChair0Taken) {
-      this.isChair0Taken = true;
+  updateNpcAnimation(npc: Npc):void {
+    if (!this.chair_0.isTaken && !npc.isOnMove && !npc.isOnChair) {
+      // npcを表示し、isOnMoveを更新
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      // 椅子に向かう
+      npc.walkToChair_0();
+      // npcを座らせるのでisTakenを更新
+      this.chair_0.updateState(true);
+      // npcが座るタイミングでdepthとisOnChairを更新する
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      // npcのwaitTimeプロパティを参照して椅子から離れる
       setTimeout(()=>{
-        this.isChair0Taken = false;
-      }, 7500)
-      if (!this.isNpc0Visible) {
-        this.isNpc0Visible = true;
-        this.npc_0.updateAnimation('chair_0');
-      } else if (!this.isNpc1Visible) {
-        this.isNpc1Visible = true;
-        this.npc_1.updateAnimation('chair_0');
-      } else if (!this.isNpc2Visible) {
-        this.isNpc2Visible = true;
-        this.npc_2.updateAnimation('chair_0');
-      } else if (!this.isNpc3Visible) {
-        this.isNpc3Visible = true;
-        this.npc_3.updateAnimation('chair_0');
-      } else if (!this.isNpc4Visible) {
-        this.isNpc4Visible = true;
-        this.npc_4.updateAnimation('chair_0');
-      } else if (!this.isNpc5Visible) {
-        this.isNpc5Visible = true;
-        this.npc_5.updateAnimation('chair_0');
-      } else if (!this.isNpc6Visible) {
-        this.isNpc6Visible = true;
-        this.npc_6.updateAnimation('chair_0');
-      } else {
-        this.isNpc0Visible = false;
-        this.isNpc1Visible = false;
-        this.isNpc2Visible = false;
-        this.isNpc3Visible = false;
-        this.isNpc4Visible = false;
-        this.isNpc5Visible = false;
-        this.isNpc6Visible = false;
-      }
+        npc.sitOnChair(false, 3);
+        this.chair_0.updateState(false);
+        npc.leaveChair_0();
+      }, 4500 + npc.waitTime)
+      // 店から出る
+      setTimeout(()=>{
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 4500 + npc.waitTime + 4500);
     } 
-    if (chair === 'chair_1' && !this.isChair1Taken) {
-      this.isChair1Taken = true;
+    else if (!this.chair_1.isTaken && !npc.isOnMove && !npc.isOnChair) {
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      npc.walkToChair_1();
+      this.chair_1.updateState(true);
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 3000)
       setTimeout(()=>{
-        this.isChair1Taken = false;
-      }, 6000)
-      if (!this.isNpc0Visible) {
-        this.isNpc0Visible = true;
-        this.npc_0.updateAnimation('chair_1');
-      } else if (!this.isNpc1Visible) {
-        this.isNpc1Visible = true;
-        this.npc_1.updateAnimation('chair_1');
-      } else if (!this.isNpc2Visible) {
-        this.isNpc2Visible = true;
-        this.npc_2.updateAnimation('chair_1');
-      } else if (!this.isNpc3Visible) {
-        this.isNpc3Visible = true;
-        this.npc_3.updateAnimation('chair_1');
-      } else if (!this.isNpc4Visible) {
-        this.isNpc4Visible = true;
-        this.npc_4.updateAnimation('chair_1');
-      } else if (!this.isNpc5Visible) {
-        this.isNpc5Visible = true;
-        this.npc_5.updateAnimation('chair_1');
-      } else if (!this.isNpc6Visible) {
-        this.isNpc6Visible = true;
-        this.npc_6.updateAnimation('chair_1');
-      } else {
-        this.isNpc0Visible = false;
-        this.isNpc1Visible = false;
-        this.isNpc2Visible = false;
-        this.isNpc3Visible = false;
-        this.isNpc4Visible = false;
-        this.isNpc5Visible = false;
-        this.isNpc6Visible = false;
-      }
-    }
-    if (chair === 'chair_2' && !this.isChair2Taken) {
-      this.isChair2Taken = true;
+        npc.sitOnChair(false, 3);
+        this.chair_1.updateState(false);
+        npc.leaveChair_1();
+      }, 3000 + npc.waitTime)
       setTimeout(()=>{
-        this.isChair2Taken = false;
-      }, 6500)
-      if (!this.isNpc0Visible) {
-        this.isNpc0Visible = true;
-        this.npc_0.updateAnimation('chair_2');
-      } else if (!this.isNpc1Visible) {
-        this.isNpc1Visible = true;
-        this.npc_1.updateAnimation('chair_2');
-      } else if (!this.isNpc2Visible) {
-        this.isNpc2Visible = true;
-        this.npc_2.updateAnimation('chair_2');
-      } else if (!this.isNpc3Visible) {
-        this.isNpc3Visible = true;
-        this.npc_3.updateAnimation('chair_2');
-      } else if (!this.isNpc4Visible) {
-        this.isNpc4Visible = true;
-        this.npc_4.updateAnimation('chair_2');
-      } else if (!this.isNpc5Visible) {
-        this.isNpc5Visible = true;
-        this.npc_5.updateAnimation('chair_2');
-      } else if (!this.isNpc6Visible) {
-        this.isNpc6Visible = true;
-        this.npc_6.updateAnimation('chair_2');
-      } else {
-        this.isNpc0Visible = false;
-        this.isNpc1Visible = false;
-        this.isNpc2Visible = false;
-        this.isNpc3Visible = false;
-        this.isNpc4Visible = false;
-        this.isNpc5Visible = false;
-        this.isNpc6Visible = false;
-      }
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 3000 + npc.waitTime + 3000);
+    } 
+    else if (!this.chair_2.isTaken && !npc.isOnMove && !npc.isOnChair) {
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      npc.walkToChair_2();
+      this.chair_2.updateState(true);
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(false, 3);
+        this.chair_2.updateState(false);
+        npc.leaveChair_2();
+      }, 4500 + npc.waitTime)
+      setTimeout(()=>{
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 4500 + npc.waitTime + 4500);
     }
-  }
+    // 椅子が全て埋まっていて、かつnpcが動いていないとき
+    else if (
+      this.chair_0.isTaken &&
+      this.chair_1.isTaken &&
+      this.chair_2.isTaken &&
+      !npc.isOnMove &&
+      !npc.isOnChair
+    ) {
+      npc.updateVisible(false);
+    }
+  };
 
   checkFoodSelected() {
     if (this.cursors.space.isDown) {

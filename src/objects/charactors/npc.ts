@@ -4,36 +4,35 @@ export class Npc{
   public sprite: Phaser.GameObjects.Sprite;
   private npcName: string;
   private add: Phaser.GameObjects.GameObjectFactory;
-  private chair_0: Phaser.GameObjects.Image;
-  private chair_1: Phaser.GameObjects.Image;
-  private chair_2: Phaser.GameObjects.Image;
   private tweens: Phaser.Tweens.TweenManager;
   private NpcAnim: NpcAnim;
+  // 店内にいて動いているかどうか
+  public isOnMove: boolean;
+  // 座っているかどうか
+  public isOnChair: boolean;
+  // 注文
+  public order: string;
+  // 待つ時間
+  public waitTime: number;
+  // メニュー
+  public menu: string[];
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
     npcName: string,
-    chair_0: Phaser.GameObjects.Image,
-    chair_1: Phaser.GameObjects.Image,
-    chair_2: Phaser.GameObjects.Image,
     tweens: Phaser.Tweens.TweenManager,
   ) {
     this.add = add;
     this.npcName = npcName;
     this.sprite = this.add.sprite(360, 520, this.npcName).setScale(1.5);
-    this.sprite.visible = false;
-    this.chair_0 = chair_0;
-    this.chair_1 = chair_1;
-    this.chair_2 = chair_2;
     this.tweens = tweens;
-    this.NpcAnim = new NpcAnim(
-      this.sprite,
-      this.chair_0,
-      this.chair_1,
-      this.chair_2,
-      this.tweens,
-      this.add,
-      );
+    this.isOnMove = false;
+    this.isOnChair = false;
+    this.sprite.depth = 3;
+    this.order = 'tuna-nigiri'
+    this.waitTime = 3000;
+    this.menu = ['tuna-nigiri', 'salmon-nigiri', 'tamago-nigiri', 'ebi-nigiri', 'sashimi-tunaSalmon']
+    this.NpcAnim = new NpcAnim(this.sprite, this.tweens);
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -72,29 +71,40 @@ export class Npc{
     
   };
 
-  updateAnimation(chair: string):void {
-    if (chair === 'chair_0' && !this.sprite.visible) {
-      this.NpcAnim.walkToChair_0(this.sprite);
-      setTimeout(
-        ()=>{
-          this.NpcAnim.leaveFromChair_0(this.sprite);
-        }, 7500
-      );
-    } else if (chair === 'chair_1' && !this.sprite.visible) {
-      this.NpcAnim.walkToChair_1(this.sprite);
-      setTimeout(
-        ()=>{
-          this.NpcAnim.leaveFromChair_1(this.sprite);
-        }, 6000
-      );
-    } else if (chair === 'chair_2' && !this.sprite.visible) {
-      this.NpcAnim.walkToChair_2(this.sprite);
-      setTimeout(
-        ()=>{
-          this.NpcAnim.leaveFromChair_2(this.sprite);
-        }, 6500
-      )
-    }
-  }
-  
+  updateIsOnMove(state: boolean):void {
+    this.isOnMove = state
+  };
+
+  updateVisible(state:boolean):void {
+    this.sprite.visible = state
+  };
+
+  sitOnChair(state: boolean, depth: number):void {
+    this.isOnChair = state;
+    this.sprite.depth = depth;
+  };
+
+  walkToChair_0():void {
+    this.NpcAnim.walkToChair_0(this.sprite);
+  };
+
+  leaveChair_0():void {
+    this.NpcAnim.leaveFromChair_0(this.sprite);
+  };
+
+  walkToChair_1():void {
+    this.NpcAnim.walkToChair_1(this.sprite);
+  };
+
+  leaveChair_1():void {
+    this.NpcAnim.leaveFromChair_1(this.sprite);
+  };
+
+  walkToChair_2():void {
+    this.NpcAnim.walkToChair_2(this.sprite);
+  };
+
+  leaveChair_2():void {
+    this.NpcAnim.leaveFromChair_2(this.sprite);
+  };
 }
