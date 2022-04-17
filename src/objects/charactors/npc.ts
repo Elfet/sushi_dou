@@ -9,12 +9,8 @@ export class Npc{
   private isOnMove: boolean;
   // 座っているかどうか
   private isOnChair: boolean;
-  // 注文
-  private order: string;
   // 待つ時間
   private waitTime: number;
-  // メニュー
-  private menu: string[];
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -27,9 +23,7 @@ export class Npc{
     this.isOnMove = false;
     this.isOnChair = false;
     this.sprite.depth = 3;
-    this.order = 'tuna-nigiri'
     this.waitTime = 3000;
-    this.menu = ['tuna-nigiri', 'salmon-nigiri', 'tamago-nigiri', 'ebi-nigiri', 'sashimi-tunaSalmon']
     this.NpcAnim = new NpcAnim(this.tweens);
 
     // npcのアニメーション

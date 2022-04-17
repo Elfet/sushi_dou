@@ -101,38 +101,60 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_6);
   }
 
-  animateNpc(npc: Npc, chair: Chair ,walkToChair: Function, leaveChair: Function, time: number) {
-    // npcを表示し、isOnMoveを更新
-    npc.updateVisible(true);
-    npc.updateIsOnMove(true);
-    // 椅子に向かう
-    walkToChair();
-    // npcを座らせるのでisTakenを更新
-    chair.updateState(true);
-    // npcが座るタイミングでdepthとisOnChairを更新する
-    setTimeout(()=>{npc.sitOnChair(true, 1);}, time)
-    // npcのwaitTimeプロパティを参照して椅子から離れる
-    setTimeout(()=>{
-      npc.sitOnChair(false, 3);
-      chair.updateState(false);
-      leaveChair();
-    }, time + npc.getWaitTime())
-    // 店から出る
-    setTimeout(()=>{
-      npc.updateIsOnMove(false);
-      npc.updateVisible(false);
-    }, time + npc.getWaitTime() + time);
-  }
-
   updateNpcAnimation(npc: Npc):void {
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.animateNpc(npc, this.chair_0 ,npc.walkToChair_0, npc.leaveChair_0, 4500);
+      // npcを表示し、isOnMoveを更新
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      // 椅子に向かう
+      npc.walkToChair_0();
+      // npcを座らせるのでisTakenを更新
+      this.chair_0.updateState(true);
+      // npcが座るタイミングでdepthとisOnChairを更新する
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      // npcのwaitTimeプロパティを参照して椅子から離れる
+      setTimeout(()=>{
+        npc.sitOnChair(false, 3);
+        this.chair_0.updateState(false);
+        npc.leaveChair_0();
+      }, 4500 + npc.getWaitTime())
+      // 店から出る
+      setTimeout(()=>{
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 4500 + npc.getWaitTime() + 4500);
     } 
     else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.animateNpc(npc, this.chair_1, npc.walkToChair_1, npc.leaveChair_1, 3000);
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      npc.walkToChair_1();
+      this.chair_1.updateState(true);
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 3000)
+      setTimeout(()=>{
+        npc.sitOnChair(false, 3);
+        this.chair_1.updateState(false);
+        npc.leaveChair_1();
+      }, 3000 + npc.getWaitTime())
+      setTimeout(()=>{
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 3000 + npc.getWaitTime() + 3000);
     } 
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.animateNpc(npc, this.chair_2, npc.walkToChair_2, npc.leaveChair_2, 4500);
+      npc.updateVisible(true);
+      npc.updateIsOnMove(true);
+      npc.walkToChair_2();
+      this.chair_2.updateState(true);
+      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(false, 3);
+        this.chair_2.updateState(false);
+        npc.leaveChair_2();
+      }, 4500 + npc.getWaitTime())
+      setTimeout(()=>{
+        npc.updateIsOnMove(false);
+        npc.updateVisible(false);
+      }, 4500 + npc.getWaitTime() + 4500);
     }
     // 椅子が全て埋まっていて、かつnpcが動いていないとき
     else if (
@@ -143,9 +165,6 @@ export class MyScene extends Phaser.Scene {
       !npc.getIsOnChair()
     ) {
       npc.updateVisible(false);
-    }
-    if (npc.getIsOnChair()) {
-      
     }
   };
 
