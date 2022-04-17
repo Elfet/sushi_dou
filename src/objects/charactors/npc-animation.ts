@@ -1,5 +1,4 @@
 export class NpcAnim{
-  public npc: Phaser.GameObjects.Sprite;
   private tweens: Phaser.Tweens.TweenManager;
   // アニメーションで使う座標
   private entrance:{x: number, y: number} = {x: 360, y: 520};
@@ -12,10 +11,8 @@ export class NpcAnim{
   private cornerToChair_2:{x: number, y: number} = {x: 600, y: 420};
 
   constructor(
-    npc: Phaser.GameObjects.Sprite,
     tweens: Phaser.Tweens.TweenManager,
   ) {
-    this.npc = npc;
     this.tweens = tweens;
   }
 

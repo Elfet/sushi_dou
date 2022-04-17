@@ -1,10 +1,6 @@
 export class Chair {
-  public image: Phaser.GameObjects.Image;
-  private x: number;
-  private y: number;
-  public chairName: string;
-  private add: Phaser.GameObjects.GameObjectFactory;
-  public isTaken: boolean;
+  private image: Phaser.GameObjects.Image;
+  private isTaken: boolean;
 
   constructor(
     x: number,
@@ -12,14 +8,14 @@ export class Chair {
     chairName: string,
     add: Phaser.GameObjects.GameObjectFactory,
   ) {
-    this.x = x;
-    this.y = y;
-    this.chairName = chairName;
-    this.add = add;
     this.isTaken = false;
 
-    this.image = this.add.image(this.x, this.y, this.chairName).setScale(1.5);
+    this.image = add.image(x, y, chairName).setScale(1.5);
     this.image.depth = 2;
+  }
+
+  getIsTaken():boolean {
+    return this.isTaken;
   }
 
   updateState(state: boolean):void {

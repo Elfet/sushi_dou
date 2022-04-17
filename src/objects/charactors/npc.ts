@@ -1,21 +1,20 @@
 import { NpcAnim } from "./npc-animation";
 
 export class Npc{
-  public sprite: Phaser.GameObjects.Sprite;
-  private npcName: string;
+  private sprite: Phaser.GameObjects.Sprite;
   private add: Phaser.GameObjects.GameObjectFactory;
   private tweens: Phaser.Tweens.TweenManager;
   private NpcAnim: NpcAnim;
   // 店内にいて動いているかどうか
-  public isOnMove: boolean;
+  private isOnMove: boolean;
   // 座っているかどうか
-  public isOnChair: boolean;
+  private isOnChair: boolean;
   // 注文
-  public order: string;
+  private order: string;
   // 待つ時間
-  public waitTime: number;
+  private waitTime: number;
   // メニュー
-  public menu: string[];
+  private menu: string[];
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -23,8 +22,7 @@ export class Npc{
     tweens: Phaser.Tweens.TweenManager,
   ) {
     this.add = add;
-    this.npcName = npcName;
-    this.sprite = this.add.sprite(360, 520, this.npcName).setScale(1.5);
+    this.sprite = this.add.sprite(360, 520, npcName).setScale(1.5);
     this.tweens = tweens;
     this.isOnMove = false;
     this.isOnChair = false;
@@ -32,7 +30,7 @@ export class Npc{
     this.order = 'tuna-nigiri'
     this.waitTime = 3000;
     this.menu = ['tuna-nigiri', 'salmon-nigiri', 'tamago-nigiri', 'ebi-nigiri', 'sashimi-tunaSalmon']
-    this.NpcAnim = new NpcAnim(this.sprite, this.tweens);
+    this.NpcAnim = new NpcAnim(this.tweens);
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -69,6 +67,18 @@ export class Npc{
       frameRate: 10,
     });
     
+  };
+
+  getIsOnMove():boolean {
+    return this.isOnMove;
+  };
+
+  getIsOnChair():boolean {
+    return this.isOnChair;
+  };
+
+  getWaitTime():number {
+    return this.waitTime;
   };
 
   updateIsOnMove(state: boolean):void {
