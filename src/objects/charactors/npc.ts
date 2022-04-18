@@ -11,6 +11,8 @@ export class Npc{
   private isOnChair: boolean;
   // 待つ時間
   private waitTime: number;
+  // オーダー
+  private order: string;
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -25,6 +27,8 @@ export class Npc{
     this.sprite.depth = 3;
     this.waitTime = 5000;
     this.NpcAnim = new NpcAnim(this.tweens);
+    this.order = 'salmon_nigiri';
+    this.orderRandom();
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -110,5 +114,31 @@ export class Npc{
 
   leaveChair_2():void {
     this.NpcAnim.leaveFromChair_2(this.sprite);
+  };
+
+  getOrder() {
+    return this.order;
+  }
+
+  orderRandom ():void {
+    let randomNumber:number = Math.random() * 10 / 2;
+    if (randomNumber >= 0 && randomNumber < 1) {
+      this.order = 'salmon_nigiri';
+    }
+    else if (randomNumber >= 1 && randomNumber < 2) {
+      this.order = 'tuna_nigiri';
+    }
+    else if (randomNumber >= 2 && randomNumber < 3) {
+      this.order = 'shrimp_nigiri';
+    }
+    else if (randomNumber >= 3 && randomNumber < 4) {
+      this.order = 'egg_nigiri';
+    }
+    else if (randomNumber >= 4 && randomNumber < 5) {
+      this.order = 'sashimi_set';
+    }
+    else {
+      this.order = 'salmon_nigiri';
+    }
   };
 }

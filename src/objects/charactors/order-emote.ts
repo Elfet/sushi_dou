@@ -17,10 +17,10 @@ export class OrderEmote {
     this.egg_nigiri = add.image(x - 1, y - 5, 'egg_nigiri');
     this.shrimp_nigiri = add.image(x - 1, y - 5, 'shrimp_nigiri');
     this.sashimi_set = add.image(x - 1, y - 5, 'sashimi_set');
-    this.initializeOrder();
+    this.hideEmote();
   };
 
-  initializeOrder ():void {
+  hideEmote ():void {
     this.emote.visible = false;
     this.salmon_nigiri.visible = false;
     this.tuna_nigiri.visible = false;
@@ -30,33 +30,26 @@ export class OrderEmote {
   }
 
 
-  // ランダムで食べ物を表示し、オーダー名を返す
-  orderRandom ():string {
+  // オーダーを受け取って表示する
+  displayEmote (order: string):void {
     this.emote.visible = true;
-    let randomNumber:number = Math.random() * 10 / 2;
-    if (randomNumber >= 0 && randomNumber < 1) {
+    if (order === 'salmon_nigiri') {
       this.salmon_nigiri.visible = true;
-      return 'salmon_nigiri';
     }
-    else if (randomNumber >= 1 && randomNumber < 2) {
+    else if (order === 'tuna_nigiri') {
       this.tuna_nigiri.visible = true;
-      return 'tuna_nigiri';
     }
-    else if (randomNumber >= 2 && randomNumber < 3) {
+    else if (order === 'shrimp_nigiri') {
       this.shrimp_nigiri.visible = true;
-      return 'shrimp_nigiri';
     }
-    else if (randomNumber >= 3 && randomNumber < 4) {
+    else if (order === 'egg_nigiri') {
       this.egg_nigiri.visible = true;
-      return 'egg_nigiri';
     }
-    else if (randomNumber >= 4 && randomNumber < 5) {
+    else if (order === 'sashimi_nigiri') {
       this.sashimi_set.visible = true;
-      return 'sashimi_set';
     }
     else {
       this.salmon_nigiri.visible = true;
-      return 'salmon_nigiri';
     }
   };
 }
