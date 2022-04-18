@@ -1,8 +1,10 @@
 import Phaser from "phaser";
+import { TimeBar } from "../objects/charactors/npc-timebar";
 import { Npc } from "../objects/charactors/npc";
 import { Chair } from "../objects/chair";
 import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
+import { OrderEmote } from "../objects/charactors/order-emote";
 
 export class MyScene extends Phaser.Scene {
   private player!: Player;
@@ -23,6 +25,12 @@ export class MyScene extends Phaser.Scene {
   private shrimp!: Food;
   private tuna!: Food;
   private rice!: Food;
+  private timeBar_0!: TimeBar;
+  private timeBar_1!: TimeBar;
+  private timeBar_2!: TimeBar;
+  private emote_0!: OrderEmote;
+  private emote_1!: OrderEmote;
+  private emote_2!: OrderEmote;
 
   constructor() {
     super({ key: 'myscene' });
@@ -36,6 +44,12 @@ export class MyScene extends Phaser.Scene {
     this.load.image('shrimp', 'src/assets/foods/shrimp.png');
     this.load.image('tuna', 'src/assets/foods/tuna.png');
     this.load.image('rice', 'src/assets/foods/rice.png');
+    this.load.image('egg_nigiri', 'src/assets/foods/egg_nigiri.png');
+    this.load.image('salmon-nigiri', 'src/assets/foods/salmon-nigiri.png');
+    this.load.image('tuna_nigiri', 'src/assets/foods/tuna_nigiri.png');
+    this.load.image('shrimp_nigiri', 'src/assets/foods/shrimp_nigiri.png');
+    this.load.image('sashimi_set', 'src/assets/foods/sashimi_set.png');
+    this.load.image('emote_base', 'src/assets/characters/emote_base.png');
     this.load.spritesheet(
       'player',
       'src/assets/characters/Chef_Alex_48x48.png',
@@ -84,6 +98,16 @@ export class MyScene extends Phaser.Scene {
     this.npc_4 = new Npc(this.add, 'npc_4', this.tweens);
     this.npc_5 = new Npc(this.add, 'npc_5', this.tweens);
     this.npc_6 = new Npc(this.add, 'npc_6', this.tweens);
+
+    // npcの待ち時間ゲージ
+    this.timeBar_0 = new TimeBar(this, this.add ,170, 275);
+    this.timeBar_1 = new TimeBar(this, this.add ,370, 275);
+    this.timeBar_2 = new TimeBar(this, this.add ,570, 275);
+
+    // npcのふきだし
+    this.emote_0 = new OrderEmote(270, 320, this.add);
+    this.emote_1 = new OrderEmote(470, 320, this.add);
+    this.emote_2 = new OrderEmote(670, 320, this.add);
   }
 
   update () {
@@ -101,22 +125,36 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_6);
   }
 
+
   updateNpcAnimation(npc: Npc):void {
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
       // npcを表示し、isOnMoveを更新
       npc.updateVisible(true);
       npc.updateIsOnMove(true);
+      // オーダーを更新
+      npc.orderRandom();
       // 椅子に向かう
       npc.walkToChair_0();
       // npcを座らせるのでisTakenを更新
       this.chair_0.updateState(true);
       // npcが座るタイミングでdepthとisOnChairを更新する
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        // タイムゲージ表示＆減少
+        this.timeBar_0.updateVisible(true);
+        this.timeBar_0.decrease(npc.getWaitTime());
+        // オーダーの表示
+        this.emote_0.displayEmote(npc.getOrder());
+      }, 4500)
       // npcのwaitTimeプロパティを参照して椅子から離れる
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_0.updateState(false);
         npc.leaveChair_0();
+        // ゲージを非表示
+        this.timeBar_0.updateVisible(false);
+        // オーダーの非表示
+        this.emote_0.hideEmote();
       }, 4500 + npc.getWaitTime())
       // 店から出る
       setTimeout(()=>{
@@ -127,13 +165,21 @@ export class MyScene extends Phaser.Scene {
     else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
       npc.updateVisible(true);
       npc.updateIsOnMove(true);
+      npc.orderRandom();
       npc.walkToChair_1();
       this.chair_1.updateState(true);
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 3000)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        this.timeBar_1.updateVisible(true);
+        this.timeBar_1.decrease(npc.getWaitTime());
+        this.emote_1.displayEmote(npc.getOrder());
+      }, 3000)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_1.updateState(false);
         npc.leaveChair_1();
+        this.timeBar_1.updateVisible(false);
+        this.emote_1.hideEmote();
       }, 3000 + npc.getWaitTime())
       setTimeout(()=>{
         npc.updateIsOnMove(false);
@@ -143,13 +189,21 @@ export class MyScene extends Phaser.Scene {
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
       npc.updateVisible(true);
       npc.updateIsOnMove(true);
+      npc.orderRandom();
       npc.walkToChair_2();
       this.chair_2.updateState(true);
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        this.timeBar_2.updateVisible(true);
+        this.timeBar_2.decrease(npc.getWaitTime());
+        this.emote_2.displayEmote(npc.getOrder());
+      }, 4500)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_2.updateState(false);
         npc.leaveChair_2();
+        this.timeBar_2.updateVisible(false);
+        this.emote_2.hideEmote();
       }, 4500 + npc.getWaitTime())
       setTimeout(()=>{
         npc.updateIsOnMove(false);
