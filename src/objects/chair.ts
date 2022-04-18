@@ -1,6 +1,9 @@
+import { Npc } from "./charactors/npc";
+
 export class Chair {
   private image: Phaser.GameObjects.Image;
   private isTaken: boolean;
+  private npcOnChair?: Npc;
 
   constructor(
     x: number,
@@ -12,6 +15,14 @@ export class Chair {
 
     this.image = add.image(x, y, chairName).setScale(1.5);
     this.image.depth = 2;
+  }
+
+  setNpcOnChair(npc?: Npc):void {
+    this.npcOnChair = npc;
+  }
+
+  getNpcOnChair(): Npc | undefined {
+    return this.npcOnChair;
   }
 
   getIsTaken():boolean {
