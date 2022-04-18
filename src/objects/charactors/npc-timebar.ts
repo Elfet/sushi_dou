@@ -23,7 +23,7 @@ export class TimeBar {
   }
 
 
-  decreaseBar (amount: number) {
+  decreaseBar (amount: number):void {
     this.value = this.value - amount;
     // 0またはそれ以下になったらsetIntervalを止めてゲージを元に戻す
     if (this.value <= 0) {
@@ -33,18 +33,19 @@ export class TimeBar {
     this.draw();
   }
 
-  // npcのwaitTimeを受け取って、バーの横幅のピクセル数で割る。
+  // npcのwaitTimeを受け取って、バーの横幅のピクセル数で割る
+  // 割って出した数字を使ってsetIntervalでゲージを減らす
   // これによりゲージを1ずつ減らす動作が、npcのwaitTimeに沿って終わるようになる
-  decrease (waitTime: number) {
+  decrease (waitTime: number):void {
     this.intervalId = setInterval(()=>{this.decreaseBar(1);}, waitTime / this.value);
   }
 
-  updateVisible (state: boolean) {
+  updateVisible (state: boolean):void {
     this.bar.visible = state;
   }
 
   // ゲージの描画
-  draw () {
+  draw ():void {
     this.bar.clear();
     // ゲージのボーダーの色
     this.bar.fillStyle(0x000000);

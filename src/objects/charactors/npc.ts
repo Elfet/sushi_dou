@@ -23,7 +23,7 @@ export class Npc{
     this.isOnMove = false;
     this.isOnChair = false;
     this.sprite.depth = 3;
-    this.waitTime = 3000;
+    this.waitTime = 5000;
     this.NpcAnim = new NpcAnim(this.tweens);
 
     // npcのアニメーション
