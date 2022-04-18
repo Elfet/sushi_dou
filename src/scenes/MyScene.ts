@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { TimeBar } from "../objects/charactors/npc-timebar";
 import { Npc } from "../objects/charactors/npc";
 import { Chair } from "../objects/chair";
 import { Player } from "../objects/charactors/player";
@@ -23,6 +24,9 @@ export class MyScene extends Phaser.Scene {
   private shrimp!: Food;
   private tuna!: Food;
   private rice!: Food;
+  private timeBar_0!: TimeBar;
+  private timeBar_1!: TimeBar;
+  private timeBar_2!: TimeBar;
 
   constructor() {
     super({ key: 'myscene' });
@@ -84,6 +88,11 @@ export class MyScene extends Phaser.Scene {
     this.npc_4 = new Npc(this.add, 'npc_4', this.tweens);
     this.npc_5 = new Npc(this.add, 'npc_5', this.tweens);
     this.npc_6 = new Npc(this.add, 'npc_6', this.tweens);
+
+    // npcの待ち時間ゲージ
+    this.timeBar_0 = new TimeBar(this, this.add ,170, 275)
+    this.timeBar_1 = new TimeBar(this, this.add ,370, 275)
+    this.timeBar_2 = new TimeBar(this, this.add ,570, 275)
   }
 
   update () {
@@ -101,6 +110,7 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_6);
   }
 
+
   updateNpcAnimation(npc: Npc):void {
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
       // npcを表示し、isOnMoveを更新
@@ -111,12 +121,19 @@ export class MyScene extends Phaser.Scene {
       // npcを座らせるのでisTakenを更新
       this.chair_0.updateState(true);
       // npcが座るタイミングでdepthとisOnChairを更新する
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        // タイムゲージ表示＆減少
+        this.timeBar_0.updateVisible(true);
+        this.timeBar_0.decrease(npc.getWaitTime());
+      }, 4500)
       // npcのwaitTimeプロパティを参照して椅子から離れる
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_0.updateState(false);
         npc.leaveChair_0();
+        // ゲージを非表示
+        this.timeBar_0.updateVisible(false);
       }, 4500 + npc.getWaitTime())
       // 店から出る
       setTimeout(()=>{
@@ -129,11 +146,16 @@ export class MyScene extends Phaser.Scene {
       npc.updateIsOnMove(true);
       npc.walkToChair_1();
       this.chair_1.updateState(true);
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 3000)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        this.timeBar_1.updateVisible(true);
+        this.timeBar_1.decrease(npc.getWaitTime());
+      }, 3000)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_1.updateState(false);
         npc.leaveChair_1();
+        this.timeBar_1.updateVisible(false);
       }, 3000 + npc.getWaitTime())
       setTimeout(()=>{
         npc.updateIsOnMove(false);
@@ -145,11 +167,16 @@ export class MyScene extends Phaser.Scene {
       npc.updateIsOnMove(true);
       npc.walkToChair_2();
       this.chair_2.updateState(true);
-      setTimeout(()=>{npc.sitOnChair(true, 1);}, 4500)
+      setTimeout(()=>{
+        npc.sitOnChair(true, 1);
+        this.timeBar_2.updateVisible(true);
+        this.timeBar_2.decrease(npc.getWaitTime());
+      }, 4500)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
         this.chair_2.updateState(false);
         npc.leaveChair_2();
+        this.timeBar_2.updateVisible(false);
       }, 4500 + npc.getWaitTime())
       setTimeout(()=>{
         npc.updateIsOnMove(false);
