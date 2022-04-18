@@ -31,9 +31,6 @@ export class MyScene extends Phaser.Scene {
   private emote_0!: OrderEmote;
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
-  private order_0!: string;
-  private order_1!: string;
-  private order_2!: string;
 
   constructor() {
     super({ key: 'myscene' });
@@ -148,7 +145,6 @@ export class MyScene extends Phaser.Scene {
         this.timeBar_0.decrease(npc.getWaitTime());
         // オーダーの表示
         this.emote_0.displayEmote(npc.getOrder());
-        console.log(`order from chair_0 : ${this.order_0}`);
       }, 4500)
       // npcのwaitTimeプロパティを参照して椅子から離れる
       setTimeout(()=>{
@@ -177,7 +173,6 @@ export class MyScene extends Phaser.Scene {
         this.timeBar_1.updateVisible(true);
         this.timeBar_1.decrease(npc.getWaitTime());
         this.emote_1.displayEmote(npc.getOrder());
-        console.log(`order from chair_1 : ${this.order_1}`);
       }, 3000)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
@@ -202,7 +197,6 @@ export class MyScene extends Phaser.Scene {
         this.timeBar_2.updateVisible(true);
         this.timeBar_2.decrease(npc.getWaitTime());
         this.emote_2.displayEmote(npc.getOrder());
-        console.log(`order from chair_2 : ${this.order_2}`);
       }, 4500)
       setTimeout(()=>{
         npc.sitOnChair(false, 3);
