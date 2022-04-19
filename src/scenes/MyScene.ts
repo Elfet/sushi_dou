@@ -31,6 +31,10 @@ export class MyScene extends Phaser.Scene {
   private emote_0!: OrderEmote;
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
+  private music!: Phaser.Sound.BaseSound;
+  private sound_correct!: Phaser.Sound.BaseSound;
+  private sound_wrong!: Phaser.Sound.BaseSound;
+  private sound_select_food!: Phaser.Sound.BaseSound;
 
   constructor() {
     super({ key: 'myscene' });
@@ -63,6 +67,12 @@ export class MyScene extends Phaser.Scene {
     this.load.spritesheet('npc_4', 'src/assets/characters/npc_male_1.png', { frameWidth: 48, frameHeight: 96 });
     this.load.spritesheet('npc_5', 'src/assets/characters/npc_male_2.png', { frameWidth: 48, frameHeight: 96 });
     this.load.spritesheet('npc_6', 'src/assets/characters/npc_male_3.png', { frameWidth: 48, frameHeight: 96 });
+    // 音楽
+    this.load.audio('game-bgm', 'src/assets/music-sound/game-bgm_0.ogg');
+    // 効果音
+    this.load.audio('correct', 'src/assets/music-sound/sound-correct.mp3');
+    this.load.audio('wrong', 'src/assets/music-sound/sound-wrong.mp3');
+    this.load.audio('select_food', 'src/assets/music-sound/sound-select-food.mp3');
   }
 
   create() {
@@ -108,6 +118,14 @@ export class MyScene extends Phaser.Scene {
     this.emote_0 = new OrderEmote(270, 320, this.add);
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
+
+    this.music = this.sound.add('game-bgm', {volume: 0.1, rate: 1.25, detune: -10, loop: true});
+
+    this.music.play();
+    // 効果音
+    this.sound_correct = this.sound.add('correct', {volume: 0.09});
+    this.sound_wrong = this.sound.add('wrong', {volume: 0.09});
+    this.sound_select_food = this.sound.add('select_food', {volume: 0.09});
   }
 
   update () {
@@ -191,30 +209,35 @@ export class MyScene extends Phaser.Scene {
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.egg);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 300 && playerPositionX < 400 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.salmon);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 400 && playerPositionX < 500 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.shrimp);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 500 && playerPositionX < 600 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.tuna);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 600 && playerPositionX < 700 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.rice);
+        this.sound_select_food.play();
       }
     }
     if (this.cursors.space.isUp) {
