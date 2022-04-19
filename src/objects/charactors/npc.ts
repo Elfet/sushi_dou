@@ -92,28 +92,28 @@ export class Npc{
     this.sprite.depth = depth;
   };
 
-  async walkToChair_0(): Promise<void> {
-    await this.NpcAnim.walkToChair_0(this.sprite);
+  walkToChair_0(): void {
+    this.NpcAnim.walkToChair_0(this.sprite);
   };
 
-  async leaveChair_0(): Promise<void> {
-    await this.NpcAnim.leaveFromChair_0(this.sprite);
+  leaveChair_0(): void {
+    this.NpcAnim.leaveFromChair_0(this.sprite);
   };
 
-  async walkToChair_1(): Promise<void> {
-    await this.NpcAnim.walkToChair_1(this.sprite);
+  walkToChair_1(): void {
+    this.NpcAnim.walkToChair_1(this.sprite);
   };
 
-  async leaveChair_1(): Promise<void> {
-    await this.NpcAnim.leaveFromChair_1(this.sprite);
+  leaveChair_1(): void {
+    this.NpcAnim.leaveFromChair_1(this.sprite);
   };
 
-  async walkToChair_2(): Promise<void> {
-    await this.NpcAnim.walkToChair_2(this.sprite);
+  walkToChair_2(): void {
+    this.NpcAnim.walkToChair_2(this.sprite);
   };
 
-  async leaveChair_2(): Promise<void> {
-    await this.NpcAnim.leaveFromChair_2(this.sprite);
+  leaveChair_2(): void {
+    this.NpcAnim.leaveFromChair_2(this.sprite);
   };
 
   getOrder(): string {

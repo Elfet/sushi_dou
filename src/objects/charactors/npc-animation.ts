@@ -16,61 +16,43 @@ export class NpcAnim{
     this.tweens = tweens;
   }
 
-  walkToChair_0 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkIn(this.cornerToChair_0.y, npc, 1500);
-      setTimeout(()=>{this.npcWalkLeft(this.sitChair_0.x, npc, 2000)}, 1500);
-      setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_0.y, npc)}, 3500);
-      resolve();
-    });
+  walkToChair_0 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkIn(this.cornerToChair_0.y, npc, 1500);
+    setTimeout(()=>{this.npcWalkLeft(this.sitChair_0.x, npc, 2000)}, 1500);
+    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_0.y, npc)}, 3500);
   }
 
-  leaveFromChair_0 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkDownFromChair(this.cornerToChair_0.y, npc);
-      setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 2000)}, 1000);
-      setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 3000);
-      setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc)}, 4500);
-      resolve();
-    });
+  leaveFromChair_0 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkDownFromChair(this.cornerToChair_0.y, npc);
+    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 2000)}, 1000);
+    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 3000);
+    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc)}, 4500);
   }
 
-  walkToChair_1 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkIn(this.cornerToChair_1.y, npc, 1500);
-      setTimeout(()=>{this.npcWalkRight(this.cornerToChair_1.x, npc, 500)}, 1500);
-      setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_1.y, npc)}, 2000);
-      resolve();
-    })
+  walkToChair_1 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkIn(this.cornerToChair_1.y, npc, 1500);
+    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_1.x, npc, 500)}, 1500);
+    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_1.y, npc)}, 2000);
   }
 
-  leaveFromChair_1 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkDownFromChair(this.cornerToChair_1.y, npc);
-      setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 500)}, 1000);
-      setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 1500);
-      setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 3000);
-      resolve();
-    })
+  leaveFromChair_1 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkDownFromChair(this.cornerToChair_1.y, npc);
+    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 500)}, 1000);
+    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 1500);
+    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 3000);
   }
 
-  walkToChair_2 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkIn(this.cornerToChair_2.y, npc, 1500);
-      setTimeout(()=>{this.npcWalkRight(this.cornerToChair_2.x, npc, 2000)}, 1500);
-      setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_2.y, npc)}, 3500);
-      resolve();
-    })
+  walkToChair_2 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkIn(this.cornerToChair_2.y, npc, 1500);
+    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_2.x, npc, 2000)}, 1500);
+    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_2.y, npc)}, 3500);
   }
 
-  leaveFromChair_2 (npc: Phaser.GameObjects.Sprite): Promise<void> {
-    return new Promise(resolve => {
-      this.npcWalkDownFromChair(this.cornerToChair_2.y, npc);
-      setTimeout(()=>{this.npcWalkLeft(this.exit.x, npc, 2000)}, 1000);
-      setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)},3000);
-      setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 4500);
-      resolve();
-    })
+  leaveFromChair_2 (npc: Phaser.GameObjects.Sprite): void {
+    this.npcWalkDownFromChair(this.cornerToChair_2.y, npc);
+    setTimeout(()=>{this.npcWalkLeft(this.exit.x, npc, 2000)}, 1000);
+    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)},3000);
+    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 4500);
   }
 
   // 店に入ってくる
