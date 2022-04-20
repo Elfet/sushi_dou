@@ -1,134 +1,481 @@
 export class NpcAnim{
-  private tweens: Phaser.Tweens.TweenManager;
+  private npc: Phaser.GameObjects.Sprite
   // アニメーションで使う座標
   private entrance:{x: number, y: number} = {x: 360, y: 520};
   private exit:{x: number, y: number} = {x: 430, y: 520};
-  private sitChair_0:{x: number, y: number} = {x: 200, y: 320};
-  private cornerToChair_0:{x: number, y: number} = {x: 200, y: 420};
-  private sitChair_1:{x: number, y: number} = {x: 400, y: 320};
-  private cornerToChair_1:{x: number, y: number} = {x: 400, y: 420};
-  private sitChair_2:{x: number, y: number} = {x: 600, y: 320};
-  private cornerToChair_2:{x: number, y: number} = {x: 600, y: 420};
+  private cornerY: number = 420;
+  private chairY: number = 320;
+  private chair0X: number = 200;
+  private chair1X: number = 400;
+  private chair2X: number = 600;
 
   constructor(
-    tweens: Phaser.Tweens.TweenManager,
+    npc: Phaser.GameObjects.Sprite,
   ) {
-    this.tweens = tweens;
+    this.npc = npc;
   }
 
-  walkToChair_0 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkIn(this.cornerToChair_0.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkLeft(this.sitChair_0.x, npc, 2000)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_0.y, npc)}, 3500);
-  }
-
-  leaveFromChair_0 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkDownFromChair(this.cornerToChair_0.y, npc);
-    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 2000)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 3000);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc)}, 4500);
-  }
-
-  walkToChair_1 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkIn(this.cornerToChair_1.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_1.x, npc, 500)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_1.y, npc)}, 2000);
-  }
-
-  leaveFromChair_1 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkDownFromChair(this.cornerToChair_1.y, npc);
-    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 500)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 1500);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 3000);
-  }
-
-  walkToChair_2 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkIn(this.cornerToChair_2.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_2.x, npc, 2000)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_2.y, npc)}, 3500);
-  }
-
-  leaveFromChair_2 (npc: Phaser.GameObjects.Sprite):void {
-    this.npcWalkDownFromChair(this.cornerToChair_2.y, npc);
-    setTimeout(()=>{this.npcWalkLeft(this.exit.x, npc, 2000)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)},3000);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 4500);
-  }
-
-  // 店に入ってくる
-  npcWalkIn (y: number, npc: Phaser.GameObjects.Sprite, duration: number):void {
-    npc.visible = true;
-    npc.play({key: 'walk_up', repeat: 1});
-    this.tweens.add({
-      targets: npc,
-      y: y,
-      duration: duration,
+  comeIn (
+    updateDidAnimationEnd: Function,
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+  ):object {
+    return {
+      onStart: ()=>{
+        updateDidAnimationEnd(false);
+        updateIsOnMove(true);
+        updateChairState(true);
+        updateNpcVisible(true);
+        orderRandom();
+        this.npc.play({key: 'walk_up', repeat: -1});
+      },
+      targets: this.npc,
+      y: this.cornerY,
+      duration: 1500,
       ease: 'Linear'
-    })
+    }
   };
 
-  // 左に歩く
-  npcWalkLeft (x: number, npc: Phaser.GameObjects.Sprite, duration: number):void {
-    npc.play({key: 'walk_left', repeat: 1});
-    this.tweens.add({
-      targets: npc,
-      x: x,
-      duration: duration,
-      ease: 'Linear'
-    })
-  };
-
-  // 椅子に向かって歩く
-  npcWalkUpToChair (y: number, npc: Phaser.GameObjects.Sprite):void {
-    npc.play({key: 'walk_up', repeat: 0});
-    this.tweens.add({
-      targets: npc,
-      y: y,
+  forcedWalkDown (
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    function4: Function,
+    function5: Function,
+  ): object {
+    return {
+      onStart: ()=>{
+        updateIsLeaving(true);
+        sitOnChair(false);
+        updateChairState(false);
+        updateTimebarVisible(false);
+        function4();
+        function5();
+        this.npc.play({key: 'walk_down', repeat: -1});
+      },
+      targets: this.npc,
+      y: this.cornerY,
       duration: 1000,
       ease: 'Linear'
-    })
+    }
   };
 
-  // 椅子から立って歩く
-  npcWalkDownFromChair (y: number, npc: Phaser.GameObjects.Sprite):void {
-    npc.play({key: 'walk_down', repeat: 0});
-    this.tweens.add({
-      targets: npc,
-      y: y,
+  getWalkToChair_0 () {
+    return this.walkToChair_0;
+  };
+
+  walkDown (
+    updateIsLeaving: Function,
+  ): object {
+    return {
+      onStart: ()=>{
+        updateIsLeaving(true);
+        this.npc.play({key: 'walk_down', repeat: -1});
+      },
+      targets: this.npc,
+      y: this.cornerY,
       duration: 1000,
       ease: 'Linear'
-    })
+    }
   };
 
-  // 右に歩く
-  npcWalkRight (x: number, npc: Phaser.GameObjects.Sprite, duration: number):void {
-    npc.play({key: 'walk_right', repeat: 1});
-    this.tweens.add({
-      targets: npc,
-      x: x,
-      duration: duration,
-      ease: 'Linear'
-    })
+  leave (
+    updateNpcVisible: Function
+  ):object {
+    return {
+      onStart: ()=>{
+        this.npc.play({key: 'walk_down', repeat: -1});
+      },
+      targets: this.npc,
+      y: this.exit.y,
+      duration: 1500,
+      ease: 'Linear',
+      onComplete: ()=>{
+        updateNpcVisible(false);
+      }
+    }
   };
 
-  // 店から出る
-  npcWalkDown (y: number, npc: Phaser.GameObjects.Sprite, duration: number):void {
-    npc.play({key: 'walk_down', repeat: 1});
-    this.tweens.add({
-      targets: npc,
-      y: y,
-      duration: duration,
-      ease: 'Linear'
-    })
-  }
+  toChair (
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+  ):object {
+    return {
+      onStart: ()=>{
+        this.npc.play({key: 'walk_up', repeat: -1});
+      },
+      targets: this.npc,
+      y: this.chairY,
+      duration: 1000,
+      ease: 'Linear',
+      onComplete: ()=>{
+        sitOnChair(true, 1);
+        updateTimebarVisible(true);
+        timebarDecreace();
+        displayEmote();
+      }
+    }
+  };
 
-  // 入口の座標に戻る
-  npcBackToEntrance (x: number, npc: Phaser.GameObjects.Sprite):void {
-    this.tweens.add({
-      targets: npc,
-      x: x,
+  onChair (
+    chair: string,
+    updateOnWhichChair: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    hideEmote: Function,
+  ):object {
+    return {
+      onStart: ()=>{
+        this.npc.play({key: 'sit', repeat: -1});
+        updateOnWhichChair(chair);
+      },
+      targets: this.npc,
+      y: this.chairY,
+      duration: 5000,
+      ease: 'Linear',
+      onComplete: ()=>{
+        sitOnChair(false, 3);
+        updateChairState(false);
+        updateTimebarVisible(false);
+        hideEmote();
+      },
+    }
+  };
+
+  backToEntrance (
+    updateIsOnMove: Function,
+    updateIsLeaving: Function,
+    updateDidAnimationEnd: Function
+  ):object {
+    return {
+      targets: this.npc,
+      x: this.entrance.x,
       duration: 0,
-      ease: 'Linear'
-    })
-  }
+      ease: 'Linear',
+      onComplete: ()=>{
+        this.npc.play({key: 'sit', repeat: -1});
+        updateIsOnMove(false);
+        updateIsLeaving(false);
+        updateDidAnimationEnd(true);
+      }
+    }
+  };
+
+  walkToChair_0 (
+    updateDidAnimationEnd: Function,
+    updateOnWhichChair: Function,
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ): Array<object> {
+    return [
+      this.comeIn(
+        updateDidAnimationEnd,
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_left', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.chair0X,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.toChair(
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+      ),
+      // 座った
+      this.onChair(
+        'chair_0',
+        updateOnWhichChair,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        hideEmote,
+      ),
+      // 帰る
+      this.walkDown(updateIsLeaving),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd,
+      )
+    ]
+  };
+
+  walkToChair_1 (
+    updateDidAnimationEnd: Function,
+    updateOnWhichChair: Function,
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ): Array<object> {
+    return [
+      this.comeIn(
+        updateDidAnimationEnd,
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.chair1X,
+        duration: 500,
+        ease: 'Linear'
+      },
+      this.toChair(
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+      ),
+      // 座った
+      this.onChair(
+        'chair_1',
+        updateOnWhichChair,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        hideEmote,
+      ),
+      // 帰る
+      this.walkDown(updateIsLeaving),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 500,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd,
+      )
+    ]
+  };
+
+  walkToChair_2 (
+    updateDidAnimationEnd: Function,
+    updateOnWhichChair: Function,
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ): Array<object> {
+    return [
+      this.comeIn(
+        updateDidAnimationEnd,
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.chair2X,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.toChair(
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+      ),
+      // 座った
+      this.onChair(
+        'chair_2',
+        updateOnWhichChair,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        hideEmote,
+      ),
+      // 帰る
+      this.walkDown(updateIsLeaving),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_left', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd,
+      )
+    ]
+  };
+
+  leaveChair_0 (
+    updateDidAnimationEnd: Function,
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
+  ): Array<object> {
+    return [
+      this.forcedWalkDown(
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd
+      )
+    ]
+  };
+
+  leaveChair_1 (
+    updateDidAnimationEnd: Function,
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
+  ): Array<object> {
+    return [
+      this.forcedWalkDown(
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_right', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 500,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd
+      )
+    ]
+  };
+
+  leaveChair_2 (
+    updateDidAnimationEnd: Function,
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
+  ): Array<object> {
+    return [
+      this.forcedWalkDown(
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+      ),
+      {
+        onStart: ()=>{
+          this.npc.play({key: 'walk_left', repeat: -1});
+        },
+        targets: this.npc,
+        x: this.exit.x,
+        duration: 2000,
+        ease: 'Linear'
+      },
+      this.leave(updateNpcVisible),
+      this.backToEntrance(
+        updateIsOnMove,
+        updateIsLeaving,
+        updateDidAnimationEnd
+      )
+    ]
+  };
 }

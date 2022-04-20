@@ -32,9 +32,6 @@ export class MyScene extends Phaser.Scene {
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
 
-  private test!: any
-  private test2!: any
-
   constructor() {
     super({ key: 'myscene' });
   }
@@ -96,11 +93,11 @@ export class MyScene extends Phaser.Scene {
     // npc生成
     this.npc_0 = new Npc(this.add, 'npc_0', this.tweens);
     this.npc_1 = new Npc(this.add, 'npc_1', this.tweens);
-    // this.npc_2 = new Npc(this.add, 'npc_2', this.tweens);
-    // this.npc_3 = new Npc(this.add, 'npc_3', this.tweens);
-    // this.npc_4 = new Npc(this.add, 'npc_4', this.tweens);
-    // this.npc_5 = new Npc(this.add, 'npc_5', this.tweens);
-    // this.npc_6 = new Npc(this.add, 'npc_6', this.tweens);
+    this.npc_2 = new Npc(this.add, 'npc_2', this.tweens);
+    this.npc_3 = new Npc(this.add, 'npc_3', this.tweens);
+    this.npc_4 = new Npc(this.add, 'npc_4', this.tweens);
+    this.npc_5 = new Npc(this.add, 'npc_5', this.tweens);
+    this.npc_6 = new Npc(this.add, 'npc_6', this.tweens);
 
     // npcの待ち時間ゲージ
     this.timeBar_0 = new TimeBar(this, this.add ,170, 275);
@@ -111,9 +108,6 @@ export class MyScene extends Phaser.Scene {
     this.emote_0 = new OrderEmote(270, 320, this.add);
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
-    
-
-   
   }
 
   update () {
@@ -122,188 +116,125 @@ export class MyScene extends Phaser.Scene {
     // foodのstate check
     this.checkFoodSelected();
     // Npcのアニメーション
-    if (this.npc_0.getDidAnimationEnd()) {
-      this.test = this.npc_0.walkToChair_0(
-        ()=>{this.chair_0.updateState(true)},
-        ()=>{this.npc_0.updateIsOnMove(true)},
-        ()=>{this.npc_0.updateVisible(true)},
-        ()=>{this.npc_0.orderRandom()},
+    this.updateNpcAnimation(this.npc_0);
+    this.updateNpcAnimation(this.npc_1);
+    this.updateNpcAnimation(this.npc_2);
+    this.updateNpcAnimation(this.npc_3);
+    this.updateNpcAnimation(this.npc_4);
+    this.updateNpcAnimation(this.npc_5);
+    this.updateNpcAnimation(this.npc_6);
+  }
+
+  updateNpcAnimation(npc: Npc):void {
+    // アニメーションの生成
+    if (npc.getDidAnimationEnd() && !this.chair_0.getIsTaken()) {
+      npc.animation0 = npc.walkToChair_0(
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{this.chair_0.updateState(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
+        ()=>{npc.orderRandom()},
     
-        ()=>{this.npc_0.sitOnChair(true, 1)},
-        ()=>{this.timeBar_0.updateVisible(true)},
-        ()=>{this.timeBar_0.decrease(this.npc_0.getWaitTime())},
-        ()=>{this.emote_0.displayEmote(this.npc_0.getOrder())},
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.timeBar_0.updateVisible(state)},
+        ()=>{this.timeBar_0.decrease(npc.getWaitTime())},
+        ()=>{this.emote_0.displayEmote(npc.getOrder())},
     
-        ()=>{this.npc_0.sitOnChair(false, 3)},
-        ()=>{this.chair_0.updateState(false)},
-        ()=>{this.timeBar_0.updateVisible(false)},
         ()=>{this.emote_0.hideEmote()},
-    
-        ()=>{this.npc_0.updateIsLeaving(true)},
-        ()=>{this.npc_0.updateIsOnMove(false)},
-        ()=>{this.npc_0.updateIsLeaving(false)},
+        (state: boolean)=>{npc.updateIsLeaving(state)},
         )
-        this.test2 = this.npc_0.forceLeaveChair_0(
-          ()=>{this.npc_0.updateIsLeaving(true)},
-          ()=>{this.npc_0.sitOnChair(false, 3)},
-          ()=>{this.chair_0.updateState(false)},
-          ()=>{this.timeBar_0.updateVisible(false)},
-          ()=>{this.emote_0.hideEmote()},
-          ()=>{this.npc_0.updateIsOnMove(false)},
-          ()=>{this.npc_0.updateIsLeaving(false)},
-        )
-      console.log("hi")
-      
-    }
-    
-    
-    if (!this.chair_0.getIsTaken() && !this.npc_0.getIsOnMove() && !this.npc_0.getIsOnChair() && !this.npc_0.getIsLeaveing()) {
-      this.test.play();
-      console.log("ggggg")
-    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && this.npc_0.getIsOnMove() && this.npc_0.getIsOnChair() && !this.npc_0.getIsLeaveing()) {
-      this.chair_0.updateState(false);
-      console.log("ggg")
-      this.test.pause();
-      this.test.init();
-      this.test2.play();
-    }
-    
-    // this.updateNpcAnimation(this.npc_0, this.npc_0.walkToChair_0(
-    //   ()=>{this.chair_0.updateState(true)},
-    //   ()=>{this.npc_0.updateIsOnMove(true)},
-    //   ()=>{this.npc_0.updateVisible(true)},
-    //   ()=>{this.npc_0.orderRandom()},
-
-    //   ()=>{this.npc_0.sitOnChair(true, 1)},
-    //   ()=>{this.timeBar_0.updateVisible(true)},
-    //   ()=>{this.timeBar_0.decrease(this.npc_0.getWaitTime())},
-    //   ()=>{this.emote_0.displayEmote(this.npc_0.getOrder())},
-
-    //   ()=>{this.npc_0.sitOnChair(false, 3)},
-    //   ()=>{this.chair_0.updateState(false)},
-    //   ()=>{this.timeBar_0.updateVisible(false)},
-    //   ()=>{this.emote_0.hideEmote()},
-    //   ()=>{this.npc_0.leaveChair_0(
-    //     ()=>{this.npc_0.updateIsLeaving(true)},
-    //     ()=>{this.npc_0.sitOnChair(false, 3)},
-    //     ()=>{this.chair_0.updateState(false)},
-    //     ()=>{this.timeBar_0.updateVisible(false)},
-    //     ()=>{this.emote_0.hideEmote()},
-
-    //     ()=>{this.npc_0.updateIsOnMove(false)},
-    //     ()=>{this.npc_0.updateIsLeaving(false)},
-    //   )}
-    // ));
-    // this.updateNpcAnimation(this.npc_1);
-    // this.updateNpcAnimation(this.npc_2);
-    // this.updateNpcAnimation(this.npc_3);
-    // this.updateNpcAnimation(this.npc_4);
-    // this.updateNpcAnimation(this.npc_5);
-    // this.updateNpcAnimation(this.npc_6);
-    // console.log(this.npc_1.getIsOnMove())
-    // console.log(this.chair_0.getIsTaken())
-  }
-
-  updateAnimation(npc: Npc, chair: Chair, emote: OrderEmote ,timeBar: TimeBar, duration: number ,walkToChair: Phaser.Tweens.Timeline, ) {
-    // npcを表示し、isOnMoveを更新
-    // npc.updateVisible(true);
-    // npc.updateIsOnMove(true);
-    // // オーダーを更新
-    // npc.orderRandom();
-    // // 椅子に向かう
-    // sitDown.pause()
-    // leaveChair.pause()
-    walkToChair;
-    
-    // // npcを座らせるのでisTakenを更新
-    // chair.updateState(true);
-    // // npcが座るタイミングでdepthとisOnChairを更新する
-    
-    setTimeout(()=>{
-      console.log("why")
-      // sitDown.play()
-    }, duration)
-    // // npcのwaitTimeプロパティを参照して椅子から離れる
-    setTimeout(()=>{
-      // npc.sitOnChair(false, 3);
-      // chair.updateState(false);
-      console.log("what")
-      // leaveChair.play();
-      // ゲージを非表示
-      // timeBar.updateVisible(false);
-      // オーダーの非表示
-      // emote.hideEmote();
-    }, duration + npc.getWaitTime())
-    // // 店から出る
-    // setTimeout(()=>{
-    //   npc.updateIsOnMove(false);
-    //   npc.updateVisible(false);
-    // }, duration + npc.getWaitTime() + duration);
-  }
-
-  updateNpcAnimation(npc: Npc, walkToChair: Phaser.Tweens.Timeline):void {
-    walkToChair.pause();
-    if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
-      this.chair_0.updateState(true)
-      walkToChair.resume()
-      console.log("hi")
-      setTimeout(()=>{
-        walkToChair.pause()
-      },2000)
-    }
-    else if (this.cursors.space.isDown) {
-      console.log(
-        "ex"
+      npc.animation1 = npc.forceLeaveChair_0(
+        (state: boolean)=>{npc.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.chair_0.updateState(state)},
+        (state: boolean)=>{this.timeBar_0.updateVisible(state)},
+        ()=>{this.timeBar_0.resetBar()},
+        ()=>{this.emote_0.hideEmote()},
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
       )
-      walkToChair.resume()
-      // walkToChair.pause()
     }
-    // else if (npc.getIsOnMove() && !this.chair_0.getIsTaken() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
-    //   npc.leaveChair_0(
-    //     ()=>{npc.updateIsLeaving(true)},
-    //     ()=>{npc.sitOnChair(false, 3)},
-    //     ()=>{this.chair_0.updateState(false)},
-    //     ()=>{this.timeBar_0.updateVisible(false)},
-    //     ()=>{this.emote_0.hideEmote()},
-
-    //     ()=>{npc.updateIsOnMove(false)},
-    //     ()=>{npc.updateIsLeaving(false)},
-    //   )
-    // }
-    // else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
-    //   this.chair_1.updateState(true)
-    //   npc.walkToChair_0(
-    //     ()=>{this.chair_1.updateState(true)},
-    //     ()=>{npc.updateIsOnMove(true)},
-    //     ()=>{npc.updateVisible(true)},
-    //     ()=>{npc.orderRandom()},
-
-    //     ()=>{npc.sitOnChair(true, 1)},
-    //     ()=>{this.timeBar_1.updateVisible(true)},
-    //     ()=>{this.timeBar_1.decrease(npc.getWaitTime())},
-    //     ()=>{this.emote_1.displayEmote(npc.getOrder())},
-
-    //     ()=>{npc.sitOnChair(false, 3)},
-    //     ()=>{this.chair_1.updateState(false)},
-    //     ()=>{this.timeBar_1.updateVisible(false)},
-    //     ()=>{this.emote_1.hideEmote()},
-    //   )
-    // }
-    // else if (npc.getIsOnMove() && !this.chair_1.getIsTaken() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
-    //   npc.leaveChair_0(
-    //     ()=>{npc.updateIsLeaving(true)},
-    //     ()=>{npc.sitOnChair(false, 3)},
-    //     ()=>{this.chair_1.updateState(false)},
-    //     ()=>{this.timeBar_1.updateVisible(false)},
-    //     ()=>{this.emote_1.hideEmote()},
-
-    //     ()=>{npc.updateIsOnMove(false)},
-    //     ()=>{npc.updateIsLeaving(false)},
-    //   )
-    // }
-    // else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-    //   this.updateAnimation(npc, this.chair_2, this.emote_2, this.timeBar_2, 4500, ()=>{npc.walkToChair_2()}, ()=>{npc.leaveChair_2()});
-    // }
+    else if(npc.getDidAnimationEnd() && !this.chair_1.getIsTaken()){
+      npc.animation2 = npc.walkToChair_1(
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{this.chair_1.updateState(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
+        ()=>{npc.orderRandom()},
+    
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.timeBar_1.updateVisible(state)},
+        ()=>{this.timeBar_1.decrease(npc.getWaitTime())},
+        ()=>{this.emote_1.displayEmote(npc.getOrder())},
+    
+        ()=>{this.emote_1.hideEmote()},
+        (state: boolean)=>{npc.updateIsLeaving(state)},
+        )
+      npc.animation3 = npc.forceLeaveChair_1(
+        (state: boolean)=>{npc.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.chair_1.updateState(state)},
+        (state: boolean)=>{this.timeBar_1.updateVisible(state)},
+        ()=>{this.timeBar_1.resetBar()},
+        ()=>{this.emote_1.hideEmote()},
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
+      )
+    }
+    else if(npc.getDidAnimationEnd() && !this.chair_2.getIsTaken()){
+      npc.animation4 = npc.walkToChair_2(
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{this.chair_2.updateState(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
+        ()=>{npc.orderRandom()},
+    
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.timeBar_2.updateVisible(state)},
+        ()=>{this.timeBar_2.decrease(npc.getWaitTime())},
+        ()=>{this.emote_2.displayEmote(npc.getOrder())},
+    
+        ()=>{this.emote_2.hideEmote()},
+        (state: boolean)=>{npc.updateIsLeaving(state)},
+        )
+      npc.animation5 = npc.forceLeaveChair_2(
+        (state: boolean)=>{npc.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
+        (state: boolean)=>{this.chair_2.updateState(state)},
+        (state: boolean)=>{this.timeBar_2.updateVisible(state)},
+        ()=>{this.timeBar_2.resetBar()},
+        ()=>{this.emote_2.hideEmote()},
+        (state: boolean)=>{npc.updateIsOnMove(state)},
+        (state: boolean)=>{npc.updateVisible(state)},
+      )
+    }
+    // アニメーションの再生
+    if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_0.updateState(true);
+      npc.animation0.play();
+      // !trueの部分はオーダーの正誤判定の結果が入る
+    } else if (!true && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+      this.chair_0.updateState(false);
+      npc.animation0.stop();
+      npc.animation1.play();
+    }
+    else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_1.updateState(true);
+      npc.animation2.play();
+    } 
+    // !trueの部分はオーダーの正誤判定の結果が入る
+    else if (!true && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
+      this.chair_1.updateState(false);
+      npc.animation2.stop();
+      npc.animation3.play();
+    }
+    else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_2.updateState(true);
+      npc.animation4.play();
+    } 
+    // !trueの部分はオーダーの正誤判定の結果が入る
+    else if (!true && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
+      this.chair_2.updateState(false);
+      npc.animation4.stop();
+      npc.animation5.play();
+    }
     // 椅子が全て埋まっていて、かつnpcが動いていないとき
     else if (
       this.chair_0.getIsTaken() &&

@@ -16,7 +16,17 @@ export class Npc{
   // 退店中
   private isLeaving: boolean;
 
+  // どの椅子か
+  private onWhichChair: string;
+
   private didAnimationEnd: boolean;
+
+  public animation0!: Phaser.Tweens.Timeline;
+  public animation1!: Phaser.Tweens.Timeline;
+  public animation2!: Phaser.Tweens.Timeline;
+  public animation3!: Phaser.Tweens.Timeline;
+  public animation4!: Phaser.Tweens.Timeline;
+  public animation5!: Phaser.Tweens.Timeline;
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -31,10 +41,11 @@ export class Npc{
     this.isLeaving = false;
     this.sprite.depth = 3;
     this.waitTime = 5000;
-    this.NpcAnim = new NpcAnim(this.tweens);
+    this.NpcAnim = new NpcAnim(this.sprite);
     this.order = 'salmon_nigiri';
     this.orderRandom();
     this.didAnimationEnd = true;
+    this.onWhichChair = '';
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -71,16 +82,23 @@ export class Npc{
       frameRate: 10,
     });
     
-    
+  };
+
+  getAnimation0 () {
+    return this.animation0;
+  }
+
+  getOnWhichChair():string {
+    return this.onWhichChair;
   };
 
   getIsLeaveing():boolean {
     return this.isLeaving;
-  }
+  };
 
   updateIsLeaving(state: boolean) {
     this.isLeaving = state;
-  }
+  };
 
   getIsOnMove():boolean {
     return this.isOnMove;
@@ -107,314 +125,192 @@ export class Npc{
     this.sprite.depth = depth;
   };
 
-  // walkToChair_0():void {
-  //   this.NpcAnim.walkToChair_0(this.sprite);
-  // };
-  sitDown (
-    
-  ):any {
-    return this.tweens.timeline({
-      tweens: [
-        {
-          onStart: ()=>{
-            
-          },
-          targets: this.sprite,
-          duration: 5000,
-          ease: 'Linear',
-          onComplete: ()=>{
-            console.log("hh")
-          }
-        }
-      ]
-    })
-  }
+  updateDidAnimationEnd(state: boolean) {
+    this.didAnimationEnd = state;
+  };
 
   walkToChair_0 (
-    function0: Function,
-    function1: Function,
-    function2: Function,
-    function3: Function,
-    function4: Function,
-    function5: Function,
-    function6: Function,
-    function7: Function,
-    function8: Function,
-    function9: Function,
-    function10: Function,
-    function11: Function,
-    function12: Function,
-    function13: Function,
-    function14: Function,
-  ):Phaser.Tweens.Timeline {
-    
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
-      tweens: [
-        {
-          onStart: ()=>{
-            this.didAnimationEnd = false;
-            function0();
-            function1();
-            function2();
-            function3();
-            this.sprite.play({key: 'walk_up', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 420,
-          duration: 1500,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_left', repeat: -1});
-          },
-          targets: this.sprite,
-          x: 200,
-          duration: 2000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_up', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 320,
-          duration: 1000,
-          ease: 'Linear',
-          onComplete: ()=>{
-            function4();
-            function5();
-            function6();
-            function7();
-          }
-        },
-        // 座った
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'sit', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 320,
-          duration: 5000,
-          ease: 'Linear',
-          onComplete: ()=>{
-            function8();
-            function9();
-            function10();
-            function11();
-          },
-        },
-        // 帰る
-        {
-          onStart: ()=>{
-            function12();
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 420,
-          duration: 1000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_right', repeat: -1});
-          },
-          targets: this.sprite,
-          x: 430,
-          duration: 2000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 520,
-          duration: 1500,
-          ease: 'Linear',
-          onComplete: ()=>{
-            
-          }
-        },
-        {
-          onStart: ()=>{
-            
-          },
-          targets: this.sprite,
-          x: 360,
-          duration: 0,
-          ease: 'Linear',
-          onComplete: ()=>{
-            this.sprite.play({key: 'sit', repeat: -1});
-            function13();
-            function14();
-            this.didAnimationEnd = true;
-          }
-        }
-      ]
+      tweens: this.NpcAnim.walkToChair_0(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        (chair: string)=>{this.updateOnWhichChair(chair)},
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+        hideEmote,
+        updateIsLeaving,
+      )
     })
-  }
+  };
+
+  walkToChair_1 (
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ):Phaser.Tweens.Timeline {
+    return this.tweens.createTimeline({
+      paused: true,
+      tweens: this.NpcAnim.walkToChair_1(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        (chair: string)=>{this.updateOnWhichChair(chair)},
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+        hideEmote,
+        updateIsLeaving,
+      )
+    })
+  };
+
+  walkToChair_2 (
+    updateIsOnMove: Function,
+    updateChairState: Function,
+    updateNpcVisible: Function,
+    orderRandom: Function,
+    sitOnChair: Function,
+    updateTimebarVisible: Function,
+    timebarDecreace: Function,
+    displayEmote: Function,
+    hideEmote: Function,
+    updateIsLeaving: Function,
+  ):Phaser.Tweens.Timeline {
+    return this.tweens.createTimeline({
+      paused: true,
+      tweens: this.NpcAnim.walkToChair_2(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        (chair: string)=>{this.updateOnWhichChair(chair)},
+        updateIsOnMove,
+        updateChairState,
+        updateNpcVisible,
+        orderRandom,
+        sitOnChair,
+        updateTimebarVisible,
+        timebarDecreace,
+        displayEmote,
+        hideEmote,
+        updateIsLeaving,
+      )
+    })
+  };
 
   getDidAnimationEnd () {
     return this.didAnimationEnd;
-  }
-
-  leaveChair_0 (
-    function0: Function,
-    function1: Function,
-    function2: Function,
-    function3: Function,
-    function4: Function,
-    function5: Function,
-    function6: Function,
-    // function7: Function,
-  ): Phaser.Tweens.Timeline {
-    return this.tweens.timeline({
-      tweens: [
-        {
-          onStart: ()=>{
-            function0();
-            function1();
-            function2();
-            function3();
-            function4();
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 420,
-          duration: 1000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_right', repeat: -1});
-          },
-          targets: this.sprite,
-          x: 430,
-          duration: 2000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 520,
-          duration: 1500,
-          ease: 'Linear',
-          onComplete: ()=>{
-            
-          }
-        },
-        {
-          onStart: ()=>{
-            
-          },
-          targets: this.sprite,
-          x: 360,
-          duration: 0,
-          ease: 'Linear',
-          onComplete: ()=>{
-            this.sprite.play({key: 'sit', repeat: -1});
-            function5();
-            function6();
-          }
-        }
-      ]
-    })
-  }
+  };
 
   forceLeaveChair_0 (
-    function0: Function,
-    function1: Function,
-    function2: Function,
-    function3: Function,
-    function4: Function,
-    function5: Function,
-    function6: Function,
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
-      tweens: [
-        {
-          onStart: ()=>{
-            function0();
-            function1();
-            function2();
-            function3();
-            function4();
-            
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 420,
-          duration: 1000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_right', repeat: -1});
-          },
-          targets: this.sprite,
-          x: 430,
-          duration: 2000,
-          ease: 'Linear'
-        },
-        {
-          onStart: ()=>{
-            this.sprite.play({key: 'walk_down', repeat: -1});
-          },
-          targets: this.sprite,
-          y: 520,
-          duration: 1500,
-          ease: 'Linear',
-          onComplete: ()=>{
-            
-          }
-        },
-        {
-          onStart: ()=>{
-            
-          },
-          targets: this.sprite,
-          x: 360,
-          duration: 0,
-          ease: 'Linear',
-          onComplete: ()=>{
-            this.sprite.play({key: 'sit', repeat: -1});
-            function5();
-            function6();
-            this.didAnimationEnd = true;
-          }
-        }
-      ]
+      tweens: this.NpcAnim.leaveChair_0(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+        updateIsOnMove,
+        updateNpcVisible,
+      )
     })
-  }
-
-  // leaveChair_0():void {
-  //   this.NpcAnim.leaveFromChair_0(this.sprite);
-  // };
-
-  walkToChair_1():void {
-    this.NpcAnim.walkToChair_1(this.sprite);
   };
 
-  leaveChair_1():void {
-    this.NpcAnim.leaveFromChair_1(this.sprite);
+  forceLeaveChair_1 (
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
+  ): Phaser.Tweens.Timeline {
+    return this.tweens.createTimeline({
+      paused: true,
+      tweens: this.NpcAnim.leaveChair_1(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+        updateIsOnMove,
+        updateNpcVisible,
+      )
+    })
   };
 
-  walkToChair_2():void {
-    this.NpcAnim.walkToChair_2(this.sprite);
+  forceLeaveChair_2 (
+    updateIsLeaving: Function,
+    sitOnChair: Function,
+    updateChairState: Function,
+    updateTimebarVisible: Function,
+    resetBar: Function,
+    hideEmote: Function,
+    updateIsOnMove: Function,
+    updateNpcVisible: Function,
+  ): Phaser.Tweens.Timeline {
+    return this.tweens.createTimeline({
+      paused: true,
+      tweens: this.NpcAnim.leaveChair_2(
+        (state: boolean)=>{this.updateDidAnimationEnd(state)},
+        updateIsLeaving,
+        sitOnChair,
+        updateChairState,
+        updateTimebarVisible,
+        resetBar,
+        hideEmote,
+        updateIsOnMove,
+        updateNpcVisible,
+      )
+    })
   };
 
-  leaveChair_2():void {
-    this.NpcAnim.leaveFromChair_2(this.sprite);
+  updateOnWhichChair (chair: string):void {
+    this.onWhichChair = chair;
   };
 
   getOrder() {
     return this.order;
-  }
+  };
 
   orderRandom ():void {
     let randomNumber:number = Math.random() * 10 / 2;
