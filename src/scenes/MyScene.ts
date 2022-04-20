@@ -147,80 +147,47 @@ export class MyScene extends Phaser.Scene {
     // アニメーションの生成
     if (npc.getDidAnimationEnd() && !this.chair_0.getIsTaken()) {
       npc.animation0 = npc.walkToChair_0(
-        (state: boolean)=>{npc.updateIsOnMove(state)},
         (state: boolean)=>{this.chair_0.updateState(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
-        ()=>{npc.orderRandom()},
-    
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.timeBar_0.updateVisible(state)},
         ()=>{this.timeBar_0.decrease(npc.getWaitTime())},
         ()=>{this.emote_0.displayEmote(npc.getOrder())},
-    
         ()=>{this.emote_0.hideEmote()},
-        (state: boolean)=>{npc.updateIsLeaving(state)},
         )
       npc.animation1 = npc.forceLeaveChair_0(
-        (state: boolean)=>{npc.updateIsLeaving(state)},
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.chair_0.updateState(state)},
         (state: boolean)=>{this.timeBar_0.updateVisible(state)},
         ()=>{this.timeBar_0.resetBar()},
         ()=>{this.emote_0.hideEmote()},
-        (state: boolean)=>{npc.updateIsOnMove(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
       )
     }
     else if(npc.getDidAnimationEnd() && !this.chair_1.getIsTaken()){
       npc.animation2 = npc.walkToChair_1(
-        (state: boolean)=>{npc.updateIsOnMove(state)},
         (state: boolean)=>{this.chair_1.updateState(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
-        ()=>{npc.orderRandom()},
-    
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.timeBar_1.updateVisible(state)},
         ()=>{this.timeBar_1.decrease(npc.getWaitTime())},
         ()=>{this.emote_1.displayEmote(npc.getOrder())},
-    
         ()=>{this.emote_1.hideEmote()},
-        (state: boolean)=>{npc.updateIsLeaving(state)},
         )
       npc.animation3 = npc.forceLeaveChair_1(
-        (state: boolean)=>{npc.updateIsLeaving(state)},
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.chair_1.updateState(state)},
         (state: boolean)=>{this.timeBar_1.updateVisible(state)},
         ()=>{this.timeBar_1.resetBar()},
         ()=>{this.emote_1.hideEmote()},
-        (state: boolean)=>{npc.updateIsOnMove(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
       )
     }
     else if(npc.getDidAnimationEnd() && !this.chair_2.getIsTaken()){
       npc.animation4 = npc.walkToChair_2(
-        (state: boolean)=>{npc.updateIsOnMove(state)},
         (state: boolean)=>{this.chair_2.updateState(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
-        ()=>{npc.orderRandom()},
-    
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.timeBar_2.updateVisible(state)},
         ()=>{this.timeBar_2.decrease(npc.getWaitTime())},
         ()=>{this.emote_2.displayEmote(npc.getOrder())},
-    
         ()=>{this.emote_2.hideEmote()},
-        (state: boolean)=>{npc.updateIsLeaving(state)},
         )
       npc.animation5 = npc.forceLeaveChair_2(
-        (state: boolean)=>{npc.updateIsLeaving(state)},
-        (state: boolean, depth: number)=>{npc.sitOnChair(state, depth)},
         (state: boolean)=>{this.chair_2.updateState(state)},
         (state: boolean)=>{this.timeBar_2.updateVisible(state)},
         ()=>{this.timeBar_2.resetBar()},
         ()=>{this.emote_2.hideEmote()},
-        (state: boolean)=>{npc.updateIsOnMove(state)},
-        (state: boolean)=>{npc.updateVisible(state)},
       )
     }
     // アニメーションの再生
@@ -228,7 +195,7 @@ export class MyScene extends Phaser.Scene {
       this.chair_0.updateState(true);
       npc.animation0.play();
       // !trueの部分はオーダーの正誤判定の結果が入る
-    } else if (!true && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
       this.chair_0.updateState(false);
       npc.animation0.stop();
       npc.animation1.play();

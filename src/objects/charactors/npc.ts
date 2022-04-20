@@ -130,94 +130,79 @@ export class Npc{
   };
 
   walkToChair_0 (
-    updateIsOnMove: Function,
     updateChairState: Function,
-    updateNpcVisible: Function,
-    orderRandom: Function,
-    sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
     displayEmote: Function,
     hideEmote: Function,
-    updateIsLeaving: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.walkToChair_0(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
         (chair: string)=>{this.updateOnWhichChair(chair)},
-        updateIsOnMove,
+        (state: boolean)=>{this.updateIsOnMove(state)},
         updateChairState,
-        updateNpcVisible,
-        orderRandom,
-        sitOnChair,
+        (state: boolean)=>{this.updateVisible(state)},
+        ()=>{this.orderRandom()},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
         displayEmote,
         hideEmote,
-        updateIsLeaving,
+        (state: boolean)=>{this.updateIsLeaving(state)},
       )
     })
   };
 
   walkToChair_1 (
-    updateIsOnMove: Function,
     updateChairState: Function,
-    updateNpcVisible: Function,
-    orderRandom: Function,
-    sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
     displayEmote: Function,
     hideEmote: Function,
-    updateIsLeaving: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.walkToChair_1(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
         (chair: string)=>{this.updateOnWhichChair(chair)},
-        updateIsOnMove,
+        (state: boolean)=>{this.updateIsOnMove(state)},
         updateChairState,
-        updateNpcVisible,
-        orderRandom,
-        sitOnChair,
+        (state: boolean)=>{this.updateVisible(state)},
+        ()=>{this.orderRandom()},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
         displayEmote,
         hideEmote,
-        updateIsLeaving,
+        (state: boolean)=>{this.updateIsLeaving(state)},
       )
     })
   };
 
   walkToChair_2 (
-    updateIsOnMove: Function,
     updateChairState: Function,
-    updateNpcVisible: Function,
-    orderRandom: Function,
-    sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
     displayEmote: Function,
     hideEmote: Function,
-    updateIsLeaving: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.walkToChair_2(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
         (chair: string)=>{this.updateOnWhichChair(chair)},
-        updateIsOnMove,
+        (state: boolean)=>{this.updateIsOnMove(state)},
         updateChairState,
-        updateNpcVisible,
-        orderRandom,
-        sitOnChair,
+        (state: boolean)=>{this.updateVisible(state)},
+        ()=>{this.orderRandom()},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
         displayEmote,
         hideEmote,
-        updateIsLeaving,
+        (state: boolean)=>{this.updateIsLeaving(state)},
       )
     })
   };
@@ -227,79 +212,67 @@ export class Npc{
   };
 
   forceLeaveChair_0 (
-    updateIsLeaving: Function,
-    sitOnChair: Function,
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
     hideEmote: Function,
-    updateIsOnMove: Function,
-    updateNpcVisible: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.leaveChair_0(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
-        updateIsLeaving,
-        sitOnChair,
+        (state: boolean)=>{this.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateChairState,
         updateTimebarVisible,
         resetBar,
         hideEmote,
-        updateIsOnMove,
-        updateNpcVisible,
+        (state: boolean)=>{this.updateIsOnMove(state)},
+        (state: boolean)=>{this.updateVisible(state)},
       )
     })
   };
 
   forceLeaveChair_1 (
-    updateIsLeaving: Function,
-    sitOnChair: Function,
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
     hideEmote: Function,
-    updateIsOnMove: Function,
-    updateNpcVisible: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.leaveChair_1(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
-        updateIsLeaving,
-        sitOnChair,
+        (state: boolean)=>{this.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateChairState,
         updateTimebarVisible,
         resetBar,
         hideEmote,
-        updateIsOnMove,
-        updateNpcVisible,
+        (state: boolean)=>{this.updateIsOnMove(state)},
+        (state: boolean)=>{this.updateVisible(state)},
       )
     })
   };
 
   forceLeaveChair_2 (
-    updateIsLeaving: Function,
-    sitOnChair: Function,
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
     hideEmote: Function,
-    updateIsOnMove: Function,
-    updateNpcVisible: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
       tweens: this.NpcAnim.leaveChair_2(
         (state: boolean)=>{this.updateDidAnimationEnd(state)},
-        updateIsLeaving,
-        sitOnChair,
+        (state: boolean)=>{this.updateIsLeaving(state)},
+        (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateChairState,
         updateTimebarVisible,
         resetBar,
         hideEmote,
-        updateIsOnMove,
-        updateNpcVisible,
+        (state: boolean)=>{this.updateIsOnMove(state)},
+        (state: boolean)=>{this.updateVisible(state)},
       )
     })
   };
