@@ -119,13 +119,13 @@ export class MyScene extends Phaser.Scene {
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
 
-    this.music = this.sound.add('game-bgm', {volume: 0.1, rate: 1.25, detune: -10, loop: true});
+    this.music = this.sound.add('game-bgm', {volume: 0.05, rate: 1.3, detune: -20, loop: true});
 
     this.music.play();
     // 効果音
-    this.sound_correct = this.sound.add('correct', {volume: 0.09});
-    this.sound_wrong = this.sound.add('wrong', {volume: 0.09});
-    this.sound_select_food = this.sound.add('select_food', {volume: 0.09});
+    this.sound_correct = this.sound.add('correct', {volume: 0.04});
+    this.sound_wrong = this.sound.add('wrong', {volume: 0.04});
+    this.sound_select_food = this.sound.add('select_food', {volume: 0.04});
   }
 
   update () {
