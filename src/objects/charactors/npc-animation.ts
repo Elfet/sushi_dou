@@ -15,46 +15,6 @@ export class NpcAnim{
     this.npc = npc;
   }
 
-<<<<<<< HEAD
-  walkToChair_0 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkIn(this.cornerToChair_0.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkLeft(this.sitChair_0.x, npc, 2000)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_0.y, npc)}, 3500);
-  }
-
-  leaveFromChair_0 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkDownFromChair(this.cornerToChair_0.y, npc);
-    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 2000)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 3000);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc)}, 4500);
-  }
-
-  walkToChair_1 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkIn(this.cornerToChair_1.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_1.x, npc, 500)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_1.y, npc)}, 2000);
-  }
-
-  leaveFromChair_1 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkDownFromChair(this.cornerToChair_1.y, npc);
-    setTimeout(()=>{this.npcWalkRight(this.exit.x, npc, 500)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)}, 1500);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 3000);
-  }
-
-  walkToChair_2 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkIn(this.cornerToChair_2.y, npc, 1500);
-    setTimeout(()=>{this.npcWalkRight(this.cornerToChair_2.x, npc, 2000)}, 1500);
-    setTimeout(()=>{this.npcWalkUpToChair(this.sitChair_2.y, npc)}, 3500);
-  }
-
-  leaveFromChair_2 (npc: Phaser.GameObjects.Sprite): void {
-    this.npcWalkDownFromChair(this.cornerToChair_2.y, npc);
-    setTimeout(()=>{this.npcWalkLeft(this.exit.x, npc, 2000)}, 1000);
-    setTimeout(()=>{this.npcWalkDown(this.exit.y, npc, 1500)},3000);
-    setTimeout(()=>{this.npcBackToEntrance(this.entrance.x, npc);}, 4500);
-  }
-=======
   comeIn (
     updateDidAnimationEnd: Function,
     updateIsOnMove: Function,
@@ -161,7 +121,6 @@ export class NpcAnim{
       }
     }
   };
->>>>>>> develop
 
   onChair (
     chair: string,

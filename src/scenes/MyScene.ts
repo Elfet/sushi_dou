@@ -31,17 +31,14 @@ export class MyScene extends Phaser.Scene {
   private emote_0!: OrderEmote;
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
-<<<<<<< HEAD
   private displayScore!: Phaser.GameObjects.Text;
   private score!: number;
 
   private foodMenu!: {[foodName: string]: Food[]};
-=======
   private music!: Phaser.Sound.BaseSound;
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
   private sound_select_food!: Phaser.Sound.BaseSound;
->>>>>>> develop
 
   constructor() {
     super({ key: 'myscene' });
@@ -126,7 +123,6 @@ export class MyScene extends Phaser.Scene {
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
 
-<<<<<<< HEAD
     // scoreテキスト
     this.add.text(540, 30, 'SCORE:', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
     this.displayScore = this.add.text(650, 30, '0', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
@@ -139,15 +135,13 @@ export class MyScene extends Phaser.Scene {
       'egg_nigiri': [this.egg, this.rice],
       'sashimi_set': [this.salmon, this.tuna],
     }
-=======
-    this.music = this.sound.add('game-bgm', {volume: 0.1, rate: 1.25, detune: -10, loop: true});
+    this.music = this.sound.add('game-bgm', {volume: 0.06, rate: 1.25, detune: -10, loop: true});
 
     this.music.play();
     // 効果音
     this.sound_correct = this.sound.add('correct', {volume: 0.09});
     this.sound_wrong = this.sound.add('wrong', {volume: 0.09});
     this.sound_select_food = this.sound.add('select_food', {volume: 0.09});
->>>>>>> develop
   }
 
   update () {
@@ -167,56 +161,6 @@ export class MyScene extends Phaser.Scene {
     this.checkFoodOrder();
   }
 
-<<<<<<< HEAD
-  async updateAnimation(npc: Npc, npcWalkToChair: Function, npcLeaveChair: Function, chair: Chair, emote: OrderEmote, waitTime: number, timeBar: TimeBar) {
-    // npcを表示し、isOnMoveを更新
-    npc.updateVisible(true);
-    npc.updateIsOnMove(true);
-    // オーダーを更新
-    npc.orderRandom();
-    // 椅子に向かう
-    npcWalkToChair();
-    // npcを座らせるのでisTakenを更新
-    chair.updateState(true);
-    // npcが座るタイミングでdepthとisOnChairを更新する
-    setTimeout(()=>{
-      npc.sitOnChair(true, 1);
-      chair.setNpcOnChair(npc);
-      // タイムゲージ表示＆減少
-      timeBar.updateVisible(true);
-      timeBar.decrease(npc.getWaitTime());
-      // オーダーの表示
-      emote.displayEmote(npc.getOrder());
-    }, waitTime)
-    // npcのwaitTimeプロパティを参照して椅子から離れる
-    setTimeout(()=>{
-      npc.sitOnChair(false, 3);
-      chair.setNpcOnChair(undefined);
-      chair.updateState(false);
-      npcLeaveChair();
-      // ゲージを非表示
-      timeBar.updateVisible(false);
-      // オーダーの非表示
-      emote.hideEmote();
-    }, waitTime + npc.getWaitTime())
-    // 店から出る
-    setTimeout(()=>{
-      npc.updateIsOnMove(false);
-      npc.updateVisible(false);
-    }, waitTime + npc.getWaitTime() + waitTime);
-  }
-
-  updateNpcAnimation(npc: Npc):void {
-    if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.updateAnimation(npc, ()=>{npc.walkToChair_0()}, ()=>{npc.leaveChair_0()}, this.chair_0, this.emote_0, 4500, this.timeBar_0);
-      // this.updateLeaveToChairAnimation(npc, ()=>{npc.walkToChair_0()}, ()=>{npc.leaveChair_0()}, this.chair_0, this.emote_0, 4500, this.timeBar_0);
-    } 
-    else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.updateAnimation(npc, ()=>{npc.walkToChair_1()}, ()=>{npc.leaveChair_1()}, this.chair_1, this.emote_1, 3000, this.timeBar_1);
-    } 
-    else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
-      this.updateAnimation(npc, ()=>{npc.walkToChair_2()}, ()=>{npc.leaveChair_2()}, this.chair_2, this.emote_2, 4500, this.timeBar_2);
-=======
   updateNpcAnimation(npc: Npc):void {
     // アニメーションの生成
     if (npc.getDidAnimationEnd() && !this.chair_0.getIsTaken()) {
@@ -264,36 +208,42 @@ export class MyScene extends Phaser.Scene {
         ()=>{this.emote_2.hideEmote()},
       )
     }
+    
     // アニメーションの再生
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_0.updateState(true);
+      this.chair_0.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation0.play();
       // !trueの部分はオーダーの正誤判定の結果が入る
-    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+    } else if (npc.getIsServedFood() && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
       this.chair_0.updateState(false);
       npc.animation0.stop();
       npc.animation1.play();
     }
     else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_1.updateState(true);
+      this.chair_1.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation2.play();
     } 
     // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
+    else if (npc.getIsServedFood() && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
       this.chair_1.updateState(false);
       npc.animation2.stop();
       npc.animation3.play();
     }
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_2.updateState(true);
+      this.chair_2.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation4.play();
     } 
     // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
+    else if (npc.getIsServedFood() && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
       this.chair_2.updateState(false);
       npc.animation4.stop();
       npc.animation5.play();
->>>>>>> develop
     }
     // 椅子が全て埋まっていて、かつnpcが動いていないとき
     else if (
@@ -379,39 +329,38 @@ export class MyScene extends Phaser.Scene {
         playerPositionX >= 150 && playerPositionX < 250 && 
         playerPositionY >= 212 && playerPositionY < 232
       ){
-        if (!this.chair_0.getNpcOnChair()) return;
+        if (!this.chair_0.getNpcOnChair()?.getIsOnChair()) return;
         this.judgeServeFood(this.chair_0);
       }
       else if ( 
         playerPositionX >= 350 && playerPositionX < 450 && 
         playerPositionY >= 212 && playerPositionY < 232
       ){
-        if (!this.chair_1.getNpcOnChair()) return;
+        if (!this.chair_1.getNpcOnChair()?.getIsOnChair()) return;
         this.judgeServeFood(this.chair_1);
       }
       else if ( 
         playerPositionX >= 550 && playerPositionX < 650 && 
         playerPositionY >= 212 && playerPositionY < 232
       ){
-        if (!this.chair_2.getNpcOnChair()) return;
+        if (!this.chair_2.getNpcOnChair()?.getIsOnChair()) return;
         this.judgeServeFood(this.chair_2);
       }
     }
   }
 
   judgeServeFood(chair: Chair) {
-    console.log('test')
     const orderedFood = chair.getNpcOnChair()!.getOrder();
     const npcOrderedMenu = this.foodMenu[orderedFood].sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
     const playerSelectedMenu = this.player.getSelectedFoods().sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
-    console.log(npcOrderedMenu)
-    console.log(playerSelectedMenu);
-    if (npcOrderedMenu.every((food, index) => food ==playerSelectedMenu[index])) {
+
+    if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
       this.score++;
       this.displayScore.setText(String(this.score));
       this.player.setSelectedFood([]);
       this.resetFoodState();
     }
+    chair.getNpcOnChair()?.setIsServeFood(true);
   }
 
   resetFoodState() {

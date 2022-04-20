@@ -27,6 +27,8 @@ export class Npc{
   public animation3!: Phaser.Tweens.Timeline;
   public animation4!: Phaser.Tweens.Timeline;
   public animation5!: Phaser.Tweens.Timeline;
+
+  private isServedFood: boolean;
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -46,6 +48,7 @@ export class Npc{
     this.orderRandom();
     this.didAnimationEnd = true;
     this.onWhichChair = '';
+    this.isServedFood = false;
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -112,6 +115,14 @@ export class Npc{
     return this.waitTime;
   };
 
+  getIsServedFood(): boolean {
+    return this.isServedFood;
+  }
+
+  setIsServeFood(state: boolean): void { 
+    this.isServedFood = state;
+  }
+
   updateIsOnMove(state: boolean):void {
     this.isOnMove = state
   };
@@ -125,30 +136,6 @@ export class Npc{
     this.sprite.depth = depth;
   };
 
-<<<<<<< HEAD
-  walkToChair_0(): void {
-    this.NpcAnim.walkToChair_0(this.sprite);
-  };
-
-  leaveChair_0(): void {
-    this.NpcAnim.leaveFromChair_0(this.sprite);
-  };
-
-  walkToChair_1(): void {
-    this.NpcAnim.walkToChair_1(this.sprite);
-  };
-
-  leaveChair_1(): void {
-    this.NpcAnim.leaveFromChair_1(this.sprite);
-  };
-
-  walkToChair_2(): void {
-    this.NpcAnim.walkToChair_2(this.sprite);
-  };
-
-  leaveChair_2(): void {
-    this.NpcAnim.leaveFromChair_2(this.sprite);
-=======
   updateDidAnimationEnd(state: boolean) {
     this.didAnimationEnd = state;
   };
@@ -303,7 +290,6 @@ export class Npc{
 
   updateOnWhichChair (chair: string):void {
     this.onWhichChair = chair;
->>>>>>> develop
   };
 
   getOrder(): string {
