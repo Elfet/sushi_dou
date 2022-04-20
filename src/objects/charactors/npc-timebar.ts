@@ -44,6 +44,13 @@ export class TimeBar {
     this.bar.visible = state;
   };
 
+  // ゲージをリセット
+  resetBar () {
+    clearInterval(this.intervalId);
+    this.value = 60;
+    this.draw();
+  }
+
   // ゲージの描画
   draw ():void {
     this.bar.clear();

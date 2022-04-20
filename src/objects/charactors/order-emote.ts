@@ -45,7 +45,7 @@ export class OrderEmote {
     else if (order === 'egg_nigiri') {
       this.egg_nigiri.visible = true;
     }
-    else if (order === 'sashimi_nigiri') {
+    else if (order === 'sashimi_set') {
       this.sashimi_set.visible = true;
     }
     else {

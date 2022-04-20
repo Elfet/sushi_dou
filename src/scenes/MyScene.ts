@@ -31,10 +31,17 @@ export class MyScene extends Phaser.Scene {
   private emote_0!: OrderEmote;
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
+<<<<<<< HEAD
   private displayScore!: Phaser.GameObjects.Text;
   private score!: number;
 
   private foodMenu!: {[foodName: string]: Food[]};
+=======
+  private music!: Phaser.Sound.BaseSound;
+  private sound_correct!: Phaser.Sound.BaseSound;
+  private sound_wrong!: Phaser.Sound.BaseSound;
+  private sound_select_food!: Phaser.Sound.BaseSound;
+>>>>>>> develop
 
   constructor() {
     super({ key: 'myscene' });
@@ -67,6 +74,12 @@ export class MyScene extends Phaser.Scene {
     this.load.spritesheet('npc_4', 'src/assets/characters/npc_male_1.png', { frameWidth: 48, frameHeight: 96 });
     this.load.spritesheet('npc_5', 'src/assets/characters/npc_male_2.png', { frameWidth: 48, frameHeight: 96 });
     this.load.spritesheet('npc_6', 'src/assets/characters/npc_male_3.png', { frameWidth: 48, frameHeight: 96 });
+    // 音楽
+    this.load.audio('game-bgm', 'src/assets/music-sound/game-bgm_0.ogg');
+    // 効果音
+    this.load.audio('correct', 'src/assets/music-sound/sound-correct.mp3');
+    this.load.audio('wrong', 'src/assets/music-sound/sound-wrong.mp3');
+    this.load.audio('select_food', 'src/assets/music-sound/sound-select-food.mp3');
   }
 
   create() {
@@ -113,6 +126,7 @@ export class MyScene extends Phaser.Scene {
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
 
+<<<<<<< HEAD
     // scoreテキスト
     this.add.text(540, 30, 'SCORE:', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
     this.displayScore = this.add.text(650, 30, '0', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
@@ -125,6 +139,15 @@ export class MyScene extends Phaser.Scene {
       'egg_nigiri': [this.egg, this.rice],
       'sashimi_set': [this.salmon, this.tuna],
     }
+=======
+    this.music = this.sound.add('game-bgm', {volume: 0.1, rate: 1.25, detune: -10, loop: true});
+
+    this.music.play();
+    // 効果音
+    this.sound_correct = this.sound.add('correct', {volume: 0.09});
+    this.sound_wrong = this.sound.add('wrong', {volume: 0.09});
+    this.sound_select_food = this.sound.add('select_food', {volume: 0.09});
+>>>>>>> develop
   }
 
   update () {
@@ -144,6 +167,7 @@ export class MyScene extends Phaser.Scene {
     this.checkFoodOrder();
   }
 
+<<<<<<< HEAD
   async updateAnimation(npc: Npc, npcWalkToChair: Function, npcLeaveChair: Function, chair: Chair, emote: OrderEmote, waitTime: number, timeBar: TimeBar) {
     // npcを表示し、isOnMoveを更新
     npc.updateVisible(true);
@@ -192,6 +216,84 @@ export class MyScene extends Phaser.Scene {
     } 
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair()) {
       this.updateAnimation(npc, ()=>{npc.walkToChair_2()}, ()=>{npc.leaveChair_2()}, this.chair_2, this.emote_2, 4500, this.timeBar_2);
+=======
+  updateNpcAnimation(npc: Npc):void {
+    // アニメーションの生成
+    if (npc.getDidAnimationEnd() && !this.chair_0.getIsTaken()) {
+      npc.animation0 = npc.walkToChair_0(
+        (state: boolean)=>{this.chair_0.updateState(state)},
+        (state: boolean)=>{this.timeBar_0.updateVisible(state)},
+        ()=>{this.timeBar_0.decrease(npc.getWaitTime())},
+        ()=>{this.emote_0.displayEmote(npc.getOrder())},
+        ()=>{this.emote_0.hideEmote()},
+        )
+      npc.animation1 = npc.forceLeaveChair_0(
+        (state: boolean)=>{this.chair_0.updateState(state)},
+        (state: boolean)=>{this.timeBar_0.updateVisible(state)},
+        ()=>{this.timeBar_0.resetBar()},
+        ()=>{this.emote_0.hideEmote()},
+      )
+    }
+    else if(npc.getDidAnimationEnd() && !this.chair_1.getIsTaken()){
+      npc.animation2 = npc.walkToChair_1(
+        (state: boolean)=>{this.chair_1.updateState(state)},
+        (state: boolean)=>{this.timeBar_1.updateVisible(state)},
+        ()=>{this.timeBar_1.decrease(npc.getWaitTime())},
+        ()=>{this.emote_1.displayEmote(npc.getOrder())},
+        ()=>{this.emote_1.hideEmote()},
+        )
+      npc.animation3 = npc.forceLeaveChair_1(
+        (state: boolean)=>{this.chair_1.updateState(state)},
+        (state: boolean)=>{this.timeBar_1.updateVisible(state)},
+        ()=>{this.timeBar_1.resetBar()},
+        ()=>{this.emote_1.hideEmote()},
+      )
+    }
+    else if(npc.getDidAnimationEnd() && !this.chair_2.getIsTaken()){
+      npc.animation4 = npc.walkToChair_2(
+        (state: boolean)=>{this.chair_2.updateState(state)},
+        (state: boolean)=>{this.timeBar_2.updateVisible(state)},
+        ()=>{this.timeBar_2.decrease(npc.getWaitTime())},
+        ()=>{this.emote_2.displayEmote(npc.getOrder())},
+        ()=>{this.emote_2.hideEmote()},
+        )
+      npc.animation5 = npc.forceLeaveChair_2(
+        (state: boolean)=>{this.chair_2.updateState(state)},
+        (state: boolean)=>{this.timeBar_2.updateVisible(state)},
+        ()=>{this.timeBar_2.resetBar()},
+        ()=>{this.emote_2.hideEmote()},
+      )
+    }
+    // アニメーションの再生
+    if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_0.updateState(true);
+      npc.animation0.play();
+      // !trueの部分はオーダーの正誤判定の結果が入る
+    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+      this.chair_0.updateState(false);
+      npc.animation0.stop();
+      npc.animation1.play();
+    }
+    else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_1.updateState(true);
+      npc.animation2.play();
+    } 
+    // !trueの部分はオーダーの正誤判定の結果が入る
+    else if (!true && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
+      this.chair_1.updateState(false);
+      npc.animation2.stop();
+      npc.animation3.play();
+    }
+    else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
+      this.chair_2.updateState(true);
+      npc.animation4.play();
+    } 
+    // !trueの部分はオーダーの正誤判定の結果が入る
+    else if (!true && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
+      this.chair_2.updateState(false);
+      npc.animation4.stop();
+      npc.animation5.play();
+>>>>>>> develop
     }
     // 椅子が全て埋まっていて、かつnpcが動いていないとき
     else if (
@@ -213,30 +315,35 @@ export class MyScene extends Phaser.Scene {
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.egg);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 300 && playerPositionX < 400 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.salmon);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 400 && playerPositionX < 500 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.shrimp);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 500 && playerPositionX < 600 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.tuna);
+        this.sound_select_food.play();
       }
       else if ( 
         playerPositionX >= 600 && playerPositionX < 700 && 
         playerPositionY >= 152 && playerPositionY < 172
       ){
         this.checkFoodState(this.rice);
+        this.sound_select_food.play();
       }
     }
     if (this.cursors.space.isUp) {
