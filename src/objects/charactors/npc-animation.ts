@@ -43,17 +43,17 @@ export class NpcAnim{
     sitOnChair: Function,
     updateChairState: Function,
     updateTimebarVisible: Function,
-    function4: Function,
-    function5: Function,
+    resetBar: Function,
+    hideEmote: Function,
   ): object {
     return {
       onStart: ()=>{
         updateIsLeaving(true);
-        sitOnChair(false);
+        sitOnChair(false, 3);
         updateChairState(false);
         updateTimebarVisible(false);
-        function4();
-        function5();
+        resetBar();
+        hideEmote();
         this.npc.play({key: 'walk_down', repeat: -1});
       },
       targets: this.npc,
