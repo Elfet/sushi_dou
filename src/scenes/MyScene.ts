@@ -376,8 +376,6 @@ export class MyScene extends Phaser.Scene {
     if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
       this.score++;
       this.displayScore.setText(String(this.score));
-      this.player.setSelectedFood([]);
-      this.resetFoodState();
       reactionEmote.playHappyEmoteAnim();
       this.sound_correct.play();
     }
@@ -385,8 +383,9 @@ export class MyScene extends Phaser.Scene {
       reactionEmote.playTearEmoteAnim();
       this.sound_wrong.play();
     }
+    this.player.setSelectedFood([]);
+    this.resetFoodState();
     chair.getNpcOnChair()?.setIsServeFood(true);
-    
   }
 
   resetFoodState(): void {
