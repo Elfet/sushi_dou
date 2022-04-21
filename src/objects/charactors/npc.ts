@@ -29,7 +29,7 @@ export class Npc{
   public animation5!: Phaser.Tweens.Timeline;
 
   private isServedFood: boolean;
-
+  
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
     npcName: string,
