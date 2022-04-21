@@ -5,6 +5,7 @@ import { Chair } from "../objects/chair";
 import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
 import { OrderEmote } from "../objects/charactors/order-emote";
+import { ReactionEmote } from "../objects/charactors/reaction-emote";
 
 export class MyScene extends Phaser.Scene {
   private player!: Player;
@@ -28,9 +29,16 @@ export class MyScene extends Phaser.Scene {
   private timeBar_0!: TimeBar;
   private timeBar_1!: TimeBar;
   private timeBar_2!: TimeBar;
-  private emote_0!: OrderEmote;
-  private emote_1!: OrderEmote;
-  private emote_2!: OrderEmote;
+  private orderEmote_0!: OrderEmote;
+  private orderEmote_1!: OrderEmote;
+  private orderEmote_2!: OrderEmote;
+  private reactionEmote_0!: ReactionEmote;
+  private reactionEmote_1!: ReactionEmote;
+  private reactionEmote_2!: ReactionEmote;
+  private displayScore!: Phaser.GameObjects.Text;
+  private score!: number;
+
+  private foodMenu!: {[foodName: string]: Food[]};
   private music!: Phaser.Sound.BaseSound;
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
@@ -54,6 +62,9 @@ export class MyScene extends Phaser.Scene {
     this.load.image('shrimp_nigiri', 'src/assets/foods/shrimp_nigiri.png');
     this.load.image('sashimi_set', 'src/assets/foods/sashimi_set.png');
     this.load.image('emote_base', 'src/assets/characters/emote_base.png');
+    this.load.image('emote_happy', 'src/assets/characters/emote_happy.png');
+    this.load.image('emote_heart', 'src/assets/characters/emote_heart.png');
+    this.load.image('emote_tear', 'src/assets/characters/emote_tear.png');
     this.load.spritesheet(
       'player',
       'src/assets/characters/Chef_Alex_48x48.png',
@@ -115,16 +126,33 @@ export class MyScene extends Phaser.Scene {
     this.timeBar_2 = new TimeBar(this, this.add ,570, 275);
 
     // npcのふきだし
-    this.emote_0 = new OrderEmote(270, 320, this.add);
-    this.emote_1 = new OrderEmote(470, 320, this.add);
-    this.emote_2 = new OrderEmote(670, 320, this.add);
+    this.orderEmote_0 = new OrderEmote(270, 320, this.add);
+    this.orderEmote_1 = new OrderEmote(470, 320, this.add);
+    this.orderEmote_2 = new OrderEmote(670, 320, this.add);
 
-    this.music = this.sound.add('game-bgm', {volume: 0.05, rate: 1.3, detune: -20, loop: true});
+    // npcのリアクション
+    this.reactionEmote_0 = new ReactionEmote(200, this.add, this.tweens);
+    this.reactionEmote_1 = new ReactionEmote(400, this.add, this.tweens);
+    this.reactionEmote_2 = new ReactionEmote(600, this.add, this.tweens);
+
+    // scoreテキスト
+    this.add.text(540, 30, 'SCORE:', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
+    this.displayScore = this.add.text(650, 30, '0', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
+    this.score = 0;
+
+    this.foodMenu = {
+      'salmon_nigiri': [this.salmon, this.rice],
+      'tuna_nigiri': [this.tuna, this.rice],
+      'shrimp_nigiri': [this.shrimp, this.rice],
+      'egg_nigiri': [this.egg, this.rice],
+      'sashimi_set': [this.salmon, this.tuna],
+    }
+    this.music = this.sound.add('game-bgm', {volume: 0.06, rate: 1.25, detune: -10, loop: true});
 
     this.music.play();
     // 効果音
-    this.sound_correct = this.sound.add('correct', {volume: 0.04});
-    this.sound_wrong = this.sound.add('wrong', {volume: 0.04});
+    this.sound_correct = this.sound.add('correct', {volume: 0.07});
+    this.sound_wrong = this.sound.add('wrong', {volume: 0.07});
     this.sound_select_food = this.sound.add('select_food', {volume: 0.04});
   }
 
@@ -141,6 +169,8 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_4);
     this.updateNpcAnimation(this.npc_5);
     this.updateNpcAnimation(this.npc_6);
+
+    this.checkFoodOrder();
   }
 
   updateNpcAnimation(npc: Npc):void {
@@ -150,14 +180,15 @@ export class MyScene extends Phaser.Scene {
         (state: boolean)=>{this.chair_0.updateState(state)},
         (state: boolean)=>{this.timeBar_0.updateVisible(state)},
         ()=>{this.timeBar_0.decrease(npc.getWaitTime())},
-        ()=>{this.emote_0.displayEmote(npc.getOrder())},
-        ()=>{this.emote_0.hideEmote()},
+        ()=>{this.orderEmote_0.displayEmote(npc.getOrder())},
+        ()=>{this.orderEmote_0.hideEmote()},
+        ()=>{this.reactionEmote_0.playTearEmoteAnim()},
         )
       npc.animation1 = npc.forceLeaveChair_0(
         (state: boolean)=>{this.chair_0.updateState(state)},
         (state: boolean)=>{this.timeBar_0.updateVisible(state)},
         ()=>{this.timeBar_0.resetBar()},
-        ()=>{this.emote_0.hideEmote()},
+        ()=>{this.orderEmote_0.hideEmote()},
       )
     }
     else if(npc.getDidAnimationEnd() && !this.chair_1.getIsTaken()){
@@ -165,14 +196,15 @@ export class MyScene extends Phaser.Scene {
         (state: boolean)=>{this.chair_1.updateState(state)},
         (state: boolean)=>{this.timeBar_1.updateVisible(state)},
         ()=>{this.timeBar_1.decrease(npc.getWaitTime())},
-        ()=>{this.emote_1.displayEmote(npc.getOrder())},
-        ()=>{this.emote_1.hideEmote()},
+        ()=>{this.orderEmote_1.displayEmote(npc.getOrder())},
+        ()=>{this.orderEmote_1.hideEmote()},
+        ()=>{this.reactionEmote_1.playTearEmoteAnim()},
         )
       npc.animation3 = npc.forceLeaveChair_1(
         (state: boolean)=>{this.chair_1.updateState(state)},
         (state: boolean)=>{this.timeBar_1.updateVisible(state)},
         ()=>{this.timeBar_1.resetBar()},
-        ()=>{this.emote_1.hideEmote()},
+        ()=>{this.orderEmote_1.hideEmote()},
       )
     }
     else if(npc.getDidAnimationEnd() && !this.chair_2.getIsTaken()){
@@ -180,42 +212,47 @@ export class MyScene extends Phaser.Scene {
         (state: boolean)=>{this.chair_2.updateState(state)},
         (state: boolean)=>{this.timeBar_2.updateVisible(state)},
         ()=>{this.timeBar_2.decrease(npc.getWaitTime())},
-        ()=>{this.emote_2.displayEmote(npc.getOrder())},
-        ()=>{this.emote_2.hideEmote()},
+        ()=>{this.orderEmote_2.displayEmote(npc.getOrder())},
+        ()=>{this.orderEmote_2.hideEmote()},
+        ()=>{this.reactionEmote_2.playTearEmoteAnim()},
         )
       npc.animation5 = npc.forceLeaveChair_2(
         (state: boolean)=>{this.chair_2.updateState(state)},
         (state: boolean)=>{this.timeBar_2.updateVisible(state)},
         ()=>{this.timeBar_2.resetBar()},
-        ()=>{this.emote_2.hideEmote()},
+        ()=>{this.orderEmote_2.hideEmote()},
       )
     }
+    
     // アニメーションの再生
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_0.updateState(true);
+      this.chair_0.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation0.play();
-      // !trueの部分はオーダーの正誤判定の結果が入る
-    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+    } else if (npc.getIsServedFood() && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
       this.chair_0.updateState(false);
       npc.animation0.stop();
       npc.animation1.play();
     }
     else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_1.updateState(true);
+      this.chair_1.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation2.play();
     } 
-    // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
+    else if (npc.getIsServedFood() && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
       this.chair_1.updateState(false);
       npc.animation2.stop();
       npc.animation3.play();
     }
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_2.updateState(true);
+      this.chair_2.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation4.play();
     } 
-    // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
+    else if (npc.getIsServedFood() && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
       this.chair_2.updateState(false);
       npc.animation4.stop();
       npc.animation5.play();
@@ -286,10 +323,72 @@ export class MyScene extends Phaser.Scene {
     }
 
     if (food.getIsSelected()) {
-      food.onDownSelected(130, false, true);
+      food.onDownSelected(130, false);
+      food.setIsLoading(true);
+      this.player.removeSelectedFood(food);
     } 
     else {
-      food.onDownSelected(100,true, true);
+      food.onDownSelected(100,true);
+      food.setIsLoading(true);
+      this.player.addSelectedFood(food);
     }
+  }
+  
+  checkFoodOrder(): void {
+    if (this.cursors.space.isDown) {
+      const [playerPositionX, playerPositionY] = this.player.getPlayerPosition()
+      if ( 
+        playerPositionX >= 150 && playerPositionX < 250 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_0.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_0, this.reactionEmote_0);
+      }
+      else if ( 
+        playerPositionX >= 350 && playerPositionX < 450 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_1.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_1, this.reactionEmote_1);
+      }
+      else if ( 
+        playerPositionX >= 550 && playerPositionX < 650 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_2.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_2, this.reactionEmote_2);
+      }
+    }
+  }
+
+  judgeServeFood(chair: Chair, reactionEmote: ReactionEmote): void {
+    const orderedFood = chair.getNpcOnChair()!.getOrder();
+    const npcOrderedMenu = this.foodMenu[orderedFood].sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
+    const playerSelectedMenu = this.player.getSelectedFoods().sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
+
+    if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
+      this.score++;
+      this.displayScore.setText(String(this.score));
+      this.player.setSelectedFood([]);
+      this.resetFoodState();
+      reactionEmote.playHappyEmoteAnim();
+      this.sound_correct.play();
+      console.log("correct")
+    }
+    else {
+      reactionEmote.playTearEmoteAnim();
+      this.sound_wrong.play();
+      console.log("wrong")
+    }
+    chair.getNpcOnChair()?.setIsServeFood(true);
+    
+  }
+
+  resetFoodState(): void {
+    this.egg.onDownSelected(130, false)
+    this.salmon.onDownSelected(130, false)
+    this.tuna.onDownSelected(130, false)
+    this.shrimp.onDownSelected(130, false)
+    this.rice.onDownSelected(130, false)
   }
 }

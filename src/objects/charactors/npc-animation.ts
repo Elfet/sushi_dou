@@ -58,7 +58,7 @@ export class NpcAnim{
       },
       targets: this.npc,
       y: this.cornerY,
-      duration: 1000,
+      duration: 1500,
       ease: 'Linear'
     }
   };
@@ -69,15 +69,17 @@ export class NpcAnim{
 
   walkDown (
     updateIsLeaving: Function,
+    playTearEmoteAnim: Function,
   ): object {
     return {
       onStart: ()=>{
         updateIsLeaving(true);
         this.npc.play({key: 'walk_down', repeat: -1});
+        playTearEmoteAnim();
       },
       targets: this.npc,
       y: this.cornerY,
-      duration: 1000,
+      duration: 1500,
       ease: 'Linear'
     }
   };
@@ -177,9 +179,10 @@ export class NpcAnim{
     sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
+    displayOrderEmote: Function,
     hideEmote: Function,
     updateIsLeaving: Function,
+    playTearEmoteAnim: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -202,7 +205,7 @@ export class NpcAnim{
         sitOnChair,
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
+        displayOrderEmote,
       ),
       // 座った
       this.onChair(
@@ -214,7 +217,7 @@ export class NpcAnim{
         hideEmote,
       ),
       // 帰る
-      this.walkDown(updateIsLeaving),
+      this.walkDown(updateIsLeaving, playTearEmoteAnim),
       {
         onStart: ()=>{
           this.npc.play({key: 'walk_right', repeat: -1});
@@ -243,9 +246,10 @@ export class NpcAnim{
     sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
+    displayOrderEmote: Function,
     hideEmote: Function,
     updateIsLeaving: Function,
+    playTearEmoteAnim: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -268,7 +272,7 @@ export class NpcAnim{
         sitOnChair,
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
+        displayOrderEmote,
       ),
       // 座った
       this.onChair(
@@ -280,7 +284,7 @@ export class NpcAnim{
         hideEmote,
       ),
       // 帰る
-      this.walkDown(updateIsLeaving),
+      this.walkDown(updateIsLeaving, playTearEmoteAnim),
       {
         onStart: ()=>{
           this.npc.play({key: 'walk_right', repeat: -1});
@@ -309,9 +313,10 @@ export class NpcAnim{
     sitOnChair: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
+    displayOrderEmote: Function,
     hideEmote: Function,
     updateIsLeaving: Function,
+    playTearEmoteAnim: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -334,7 +339,7 @@ export class NpcAnim{
         sitOnChair,
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
+        displayOrderEmote,
       ),
       // 座った
       this.onChair(
@@ -346,7 +351,7 @@ export class NpcAnim{
         hideEmote,
       ),
       // 帰る
-      this.walkDown(updateIsLeaving),
+      this.walkDown(updateIsLeaving, playTearEmoteAnim),
       {
         onStart: ()=>{
           this.npc.play({key: 'walk_left', repeat: -1});
