@@ -31,6 +31,10 @@ export class MyScene extends Phaser.Scene {
   private emote_0!: OrderEmote;
   private emote_1!: OrderEmote;
   private emote_2!: OrderEmote;
+  private displayScore!: Phaser.GameObjects.Text;
+  private score!: number;
+
+  private foodMenu!: {[foodName: string]: Food[]};
   private music!: Phaser.Sound.BaseSound;
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
@@ -119,7 +123,19 @@ export class MyScene extends Phaser.Scene {
     this.emote_1 = new OrderEmote(470, 320, this.add);
     this.emote_2 = new OrderEmote(670, 320, this.add);
 
-    this.music = this.sound.add('game-bgm', {volume: 0.1, rate: 1.25, detune: -10, loop: true});
+    // scoreテキスト
+    this.add.text(540, 30, 'SCORE:', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
+    this.displayScore = this.add.text(650, 30, '0', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
+    this.score = 0;
+
+    this.foodMenu = {
+      'salmon_nigiri': [this.salmon, this.rice],
+      'tuna_nigiri': [this.tuna, this.rice],
+      'shrimp_nigiri': [this.shrimp, this.rice],
+      'egg_nigiri': [this.egg, this.rice],
+      'sashimi_set': [this.salmon, this.tuna],
+    }
+    this.music = this.sound.add('game-bgm', {volume: 0.06, rate: 1.25, detune: -10, loop: true});
 
     this.music.play();
     // 効果音
@@ -141,6 +157,8 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_4);
     this.updateNpcAnimation(this.npc_5);
     this.updateNpcAnimation(this.npc_6);
+
+    this.checkFoodOrder();
   }
 
   updateNpcAnimation(npc: Npc):void {
@@ -190,32 +208,39 @@ export class MyScene extends Phaser.Scene {
         ()=>{this.emote_2.hideEmote()},
       )
     }
+    
     // アニメーションの再生
     if (!this.chair_0.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_0.updateState(true);
+      this.chair_0.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation0.play();
       // !trueの部分はオーダーの正誤判定の結果が入る
-    } else if (this.cursors.space.isDown && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
+    } else if (npc.getIsServedFood() && this.chair_0.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_0') {
       this.chair_0.updateState(false);
       npc.animation0.stop();
       npc.animation1.play();
     }
     else if (!this.chair_1.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_1.updateState(true);
+      this.chair_1.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation2.play();
     } 
     // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
+    else if (npc.getIsServedFood() && this.chair_1.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_1') {
       this.chair_1.updateState(false);
       npc.animation2.stop();
       npc.animation3.play();
     }
     else if (!this.chair_2.getIsTaken() && !npc.getIsOnMove() && !npc.getIsOnChair() && !npc.getIsLeaveing()) {
       this.chair_2.updateState(true);
+      this.chair_2.setNpcOnChair(npc);
+      npc.setIsServeFood(false);
       npc.animation4.play();
     } 
     // !trueの部分はオーダーの正誤判定の結果が入る
-    else if (!true && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
+    else if (npc.getIsServedFood() && this.chair_2.getIsTaken() && npc.getIsOnMove() && npc.getIsOnChair() && !npc.getIsLeaveing() && npc.getOnWhichChair() === 'chair_2') {
       this.chair_2.updateState(false);
       npc.animation4.stop();
       npc.animation5.play();
@@ -286,10 +311,63 @@ export class MyScene extends Phaser.Scene {
     }
 
     if (food.getIsSelected()) {
-      food.onDownSelected(130, false, true);
+      food.onDownSelected(130, false);
+      food.setIsLoading(true);
+      this.player.removeSelectedFood(food);
     } 
     else {
-      food.onDownSelected(100,true, true);
+      food.onDownSelected(100,true);
+      food.setIsLoading(true);
+      this.player.addSelectedFood(food);
     }
+  }
+  
+  checkFoodOrder(): void {
+    if (this.cursors.space.isDown) {
+      const [playerPositionX, playerPositionY] = this.player.getPlayerPosition()
+      if ( 
+        playerPositionX >= 150 && playerPositionX < 250 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_0.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_0);
+      }
+      else if ( 
+        playerPositionX >= 350 && playerPositionX < 450 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_1.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_1);
+      }
+      else if ( 
+        playerPositionX >= 550 && playerPositionX < 650 && 
+        playerPositionY >= 212 && playerPositionY < 232
+      ){
+        if (!this.chair_2.getNpcOnChair()?.getIsOnChair()) return;
+        this.judgeServeFood(this.chair_2);
+      }
+    }
+  }
+
+  judgeServeFood(chair: Chair): void {
+    const orderedFood = chair.getNpcOnChair()!.getOrder();
+    const npcOrderedMenu = this.foodMenu[orderedFood].sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
+    const playerSelectedMenu = this.player.getSelectedFoods().sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
+
+    if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
+      this.score++;
+      this.displayScore.setText(String(this.score));
+      this.player.setSelectedFood([]);
+      this.resetFoodState();
+    }
+    chair.getNpcOnChair()?.setIsServeFood(true);
+  }
+
+  resetFoodState(): void {
+    this.egg.onDownSelected(130, false)
+    this.salmon.onDownSelected(130, false)
+    this.tuna.onDownSelected(130, false)
+    this.shrimp.onDownSelected(130, false)
+    this.rice.onDownSelected(130, false)
   }
 }

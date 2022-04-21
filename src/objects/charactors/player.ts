@@ -1,3 +1,5 @@
+import { Food } from "../foods/food";
+
 export class Player {
 	private player: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 	private physics: Phaser.Physics.Arcade.ArcadePhysics;
@@ -5,6 +7,7 @@ export class Player {
 	private playerDirection: string = 'down';
 	private standFrameRate: number = 7;
 	private walkFrameRate: number = 7;
+  private selectedFoods: Food[] = [];
 
 	constructor(
 		physics:  Phaser.Physics.Arcade.ArcadePhysics,
@@ -76,11 +79,19 @@ export class Player {
     });
 	}
 
+  getSelectedFoods(): Food[] {
+    return this.selectedFoods;
+  }
+
+  setSelectedFood(foods: Food[]): void {
+    this.selectedFoods = foods;
+  }
+
 	setCollider(object: Phaser.Physics.Arcade.StaticGroup): void {
 		this.physics.add.collider(this.player, object)
 	}
 
-	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 1000): void {
+	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 500): void {
 		if (cursors.left.isDown) {
       this.player.setVelocityX(-1 * speed);
       this.player.setVelocityY(0);
@@ -124,5 +135,13 @@ export class Player {
 
   getPlayerPosition(): [number, number] {
     return [ this.player.x, this.player.y ]
+  }
+
+  addSelectedFood(food: Food): void {
+    this.selectedFoods.push(food);
+  }
+
+  removeSelectedFood(food: Food): void {
+    this.selectedFoods = this.selectedFoods.filter(f => !(f === food));
   }
 }

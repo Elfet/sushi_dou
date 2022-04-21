@@ -27,6 +27,8 @@ export class Npc{
   public animation3!: Phaser.Tweens.Timeline;
   public animation4!: Phaser.Tweens.Timeline;
   public animation5!: Phaser.Tweens.Timeline;
+
+  private isServedFood: boolean;
   
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
@@ -46,6 +48,7 @@ export class Npc{
     this.orderRandom();
     this.didAnimationEnd = true;
     this.onWhichChair = '';
+    this.isServedFood = false;
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -111,6 +114,14 @@ export class Npc{
   getWaitTime():number {
     return this.waitTime;
   };
+
+  getIsServedFood(): boolean {
+    return this.isServedFood;
+  }
+
+  setIsServeFood(state: boolean): void { 
+    this.isServedFood = state;
+  }
 
   updateIsOnMove(state: boolean):void {
     this.isOnMove = state
@@ -281,7 +292,7 @@ export class Npc{
     this.onWhichChair = chair;
   };
 
-  getOrder() {
+  getOrder(): string {
     return this.order;
   };
 
