@@ -29,7 +29,6 @@ export class OrderEmote {
     this.sashimi_set.visible = false;
   }
 
-
   // オーダーを受け取って表示する
   displayEmote (order: string):void {
     this.emote.visible = true;

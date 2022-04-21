@@ -29,7 +29,7 @@ export class Npc{
   public animation5!: Phaser.Tweens.Timeline;
 
   private isServedFood: boolean;
-  
+
   constructor(
     add: Phaser.GameObjects.GameObjectFactory,
     npcName: string,
@@ -144,8 +144,9 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
-    hideEmote: Function,
+    displayOrderEmote: Function,
+    hideOrderEmote: Function,
+    playTearEmoteAnim: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -159,9 +160,10 @@ export class Npc{
         (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
-        hideEmote,
+        displayOrderEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
+        playTearEmoteAnim,
       )
     })
   };
@@ -170,8 +172,9 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
-    hideEmote: Function,
+    displayOrderEmote: Function,
+    hideOrderEmote: Function,
+    playTearEmoteAnim: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -185,9 +188,10 @@ export class Npc{
         (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
-        hideEmote,
+        displayOrderEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
+        playTearEmoteAnim,
       )
     })
   };
@@ -196,8 +200,9 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     timebarDecreace: Function,
-    displayEmote: Function,
-    hideEmote: Function,
+    displayOrderEmote: Function,
+    hideOrderEmote: Function,
+    playTearEmoteAnim: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -211,9 +216,10 @@ export class Npc{
         (state: boolean, depth: number)=>{this.sitOnChair(state, depth)},
         updateTimebarVisible,
         timebarDecreace,
-        displayEmote,
-        hideEmote,
+        displayOrderEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
+        playTearEmoteAnim,
       )
     })
   };
@@ -226,7 +232,7 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
-    hideEmote: Function,
+    hideOrderEmote: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -237,7 +243,7 @@ export class Npc{
         updateChairState,
         updateTimebarVisible,
         resetBar,
-        hideEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsOnMove(state)},
         (state: boolean)=>{this.updateVisible(state)},
       )
@@ -248,7 +254,7 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
-    hideEmote: Function,
+    hideOrderEmote: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -259,7 +265,7 @@ export class Npc{
         updateChairState,
         updateTimebarVisible,
         resetBar,
-        hideEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsOnMove(state)},
         (state: boolean)=>{this.updateVisible(state)},
       )
@@ -270,7 +276,7 @@ export class Npc{
     updateChairState: Function,
     updateTimebarVisible: Function,
     resetBar: Function,
-    hideEmote: Function,
+    hideOrderEmote: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -281,7 +287,7 @@ export class Npc{
         updateChairState,
         updateTimebarVisible,
         resetBar,
-        hideEmote,
+        hideOrderEmote,
         (state: boolean)=>{this.updateIsOnMove(state)},
         (state: boolean)=>{this.updateVisible(state)},
       )
