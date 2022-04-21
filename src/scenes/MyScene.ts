@@ -10,6 +10,7 @@ import { ReactionEmote } from "../objects/charactors/reaction-emote";
 export class MyScene extends Phaser.Scene {
   private player!: Player;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private isSpacePressed!: boolean;
   private staticInterior!: Phaser.Physics.Arcade.StaticGroup;
   private npc_0!: Npc;
   private npc_1!: Npc;
@@ -106,6 +107,7 @@ export class MyScene extends Phaser.Scene {
     // Player生成
     this.player = new Player(this.physics, this.anims, 400, 200, 'player');
     this.player.setCollider(this.staticInterior);
+    
     // 椅子
     this.chair_0 = new Chair(200, 370, 'chair', this.add);
     this.chair_1 = new Chair(400, 370, 'chair', this.add);
@@ -171,7 +173,12 @@ export class MyScene extends Phaser.Scene {
     this.updateNpcAnimation(this.npc_6);
 
     this.checkFoodOrder();
+    this.updateSpaceKey();
   }
+
+  updateSpaceKey(): void{
+    this.isSpacePressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+  };
 
   updateNpcAnimation(npc: Npc):void {
     // アニメーションの生成
@@ -270,7 +277,7 @@ export class MyScene extends Phaser.Scene {
   };
 
   checkFoodSelected() {
-    if (this.cursors.space.isDown) {
+    if (this.isSpacePressed) {
       const [playerPositionX, playerPositionY] = this.player.getPlayerPosition()
       if ( 
         playerPositionX >= 200 && playerPositionX < 300 && 
@@ -335,7 +342,7 @@ export class MyScene extends Phaser.Scene {
   }
   
   checkFoodOrder(): void {
-    if (this.cursors.space.isDown) {
+    if (this.isSpacePressed) {
       const [playerPositionX, playerPositionY] = this.player.getPlayerPosition()
       if ( 
         playerPositionX >= 150 && playerPositionX < 250 && 
@@ -373,12 +380,10 @@ export class MyScene extends Phaser.Scene {
       this.resetFoodState();
       reactionEmote.playHappyEmoteAnim();
       this.sound_correct.play();
-      console.log("correct")
     }
     else {
       reactionEmote.playTearEmoteAnim();
       this.sound_wrong.play();
-      console.log("wrong")
     }
     chair.getNpcOnChair()?.setIsServeFood(true);
     
