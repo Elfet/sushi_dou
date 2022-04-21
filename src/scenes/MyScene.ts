@@ -322,7 +322,7 @@ export class MyScene extends Phaser.Scene {
     }
   }
   
-  checkFoodOrder() {
+  checkFoodOrder(): void {
     if (this.cursors.space.isDown) {
       const [playerPositionX, playerPositionY] = this.player.getPlayerPosition()
       if ( 
@@ -349,7 +349,7 @@ export class MyScene extends Phaser.Scene {
     }
   }
 
-  judgeServeFood(chair: Chair) {
+  judgeServeFood(chair: Chair): void {
     const orderedFood = chair.getNpcOnChair()!.getOrder();
     const npcOrderedMenu = this.foodMenu[orderedFood].sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
     const playerSelectedMenu = this.player.getSelectedFoods().sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
@@ -363,7 +363,7 @@ export class MyScene extends Phaser.Scene {
     chair.getNpcOnChair()?.setIsServeFood(true);
   }
 
-  resetFoodState() {
+  resetFoodState(): void {
     this.egg.onDownSelected(130, false)
     this.salmon.onDownSelected(130, false)
     this.tuna.onDownSelected(130, false)

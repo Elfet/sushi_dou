@@ -91,7 +91,7 @@ export class Player {
 		this.physics.add.collider(this.player, object)
 	}
 
-	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 1000): void {
+	onDownPlayerBehavior(cursors: Phaser.Types.Input.Keyboard.CursorKeys, speed: number = 500): void {
 		if (cursors.left.isDown) {
       this.player.setVelocityX(-1 * speed);
       this.player.setVelocityY(0);
