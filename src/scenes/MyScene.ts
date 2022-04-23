@@ -50,18 +50,21 @@ export class MyScene extends Phaser.Scene {
   }
 
   preload() {
+    const foodAssetsPath: string = 'https://hashimoto.infura-ipfs.io/ipfs/QmeNGWA2Xi86zv7nJNRk7jdbSRJ42RBjbVzuaxzFzqYJfK';
+    const soundAssetsPath: string = 'https://hashimoto.infura-ipfs.io/ipfs/QmST8VHuHot3L5P8cGsBYABX6dovQwuryRpB15stgx8ow7';
+
     this.load.image("map", "src/assets/maps/map_01.png");
     this.load.image("table", "src/assets/maps/counter_table.png");
-    this.load.image('egg', 'src/assets/foods/egg.png');
-    this.load.image('salmon', 'src/assets/foods/salmon.png');
-    this.load.image('shrimp', 'src/assets/foods/shrimp.png');
-    this.load.image('tuna', 'src/assets/foods/tuna.png');
-    this.load.image('rice', 'src/assets/foods/rice.png');
-    this.load.image('egg_nigiri', 'src/assets/foods/egg_nigiri.png');
-    this.load.image('salmon-nigiri', 'src/assets/foods/salmon-nigiri.png');
-    this.load.image('tuna_nigiri', 'src/assets/foods/tuna_nigiri.png');
-    this.load.image('shrimp_nigiri', 'src/assets/foods/shrimp_nigiri.png');
-    this.load.image('sashimi_set', 'src/assets/foods/sashimi_set.png');
+    this.load.image('egg', `${foodAssetsPath}/egg.png`);
+    this.load.image('salmon', `${foodAssetsPath}/salmon.png`);
+    this.load.image('shrimp', `${foodAssetsPath}/shrimp.png`);
+    this.load.image('tuna', `${foodAssetsPath}/tuna.png`);
+    this.load.image('rice', `${foodAssetsPath}/rice.png`);
+    this.load.image('egg_nigiri', `${foodAssetsPath}/egg_nigiri.png`);
+    this.load.image('salmon-nigiri', `${foodAssetsPath}/salmon-nigiri.png`);
+    this.load.image('tuna_nigiri', `${foodAssetsPath}/tuna_nigiri.png`);
+    this.load.image('shrimp_nigiri', `${foodAssetsPath}/shrimp_nigiri.png`);
+    this.load.image('sashimi_set', `${foodAssetsPath}/sashimi_set.png`);
     this.load.image('emote_base', 'src/assets/characters/emote_base.png');
     this.load.image('emote_happy', 'src/assets/characters/emote_happy.png');
     this.load.image('emote_heart', 'src/assets/characters/emote_heart.png');
@@ -82,9 +85,9 @@ export class MyScene extends Phaser.Scene {
     // 音楽
     this.load.audio('game-bgm', 'src/assets/music-sound/game-bgm_0.ogg');
     // 効果音
-    this.load.audio('correct', 'src/assets/music-sound/sound-correct.mp3');
-    this.load.audio('wrong', 'src/assets/music-sound/sound-wrong.mp3');
-    this.load.audio('select_food', 'src/assets/music-sound/sound-select-food.mp3');
+    this.load.audio('correct', `${soundAssetsPath}/sound-correct.mp3`);
+    this.load.audio('wrong', `${soundAssetsPath}/sound-wrong.mp3`);
+    this.load.audio('select_food', `${soundAssetsPath}/sound-select-food.mp3`);
   }
 
   create() {
