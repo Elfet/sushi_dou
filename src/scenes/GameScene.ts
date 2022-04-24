@@ -110,8 +110,8 @@ export class GameScene extends Phaser.Scene {
     this.reactionEmote_2 = new ReactionEmote(600, this.add, this.tweens);
 
     // scoreテキスト
-    this.add.text(540, 30, 'SCORE:', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
-    this.displayScore = this.add.text(650, 30, '0', { fontFamily: 'font1', color: 'black' }).setScale(1.5);
+    this.add.text(540, 30, 'SCORE :', { fontFamily: 'font1', fontSize: '20px', color: 'black' });
+    this.displayScore = this.add.text(640, 30, '0', { fontFamily: 'font1', fontSize: '20px', color: 'black' });
     this.score = 0;
 
     this.foodMenu = {

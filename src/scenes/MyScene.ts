@@ -11,11 +11,11 @@ export class MyScene extends Phaser.Scene {
   private music!: Phaser.Sound.BaseSound;
   private RKey!: Phaser.Input.Keyboard.Key;
   private isRKeyPressed!: boolean;
-
-  // ゲームスタート関連
   private titleScreen!: GameTitle;
   private isGameHappning!: boolean;
+  private timelimitDuration!: number;
   private timerEvent!: Phaser.Time.TimerEvent;
+  private countdownTimer!: Phaser.GameObjects.Text;
   // スコア画面
   private scoreScreen!: ScoreScreen;
   // プラグイン
@@ -66,9 +66,13 @@ export class MyScene extends Phaser.Scene {
   }
 
   create() {
+    // 制限時間
+    this.timelimitDuration = 30000;
+
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
+    // ゲームシーン導入
     this.scene.add('gameScene', GameScene, true, {x: 400, y: 300});
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -87,11 +91,22 @@ export class MyScene extends Phaser.Scene {
     this.isGameHappning = false;
 
     this.timerEvent = new Phaser.Time.TimerEvent({
-      delay: 10000,
+      delay: this.timelimitDuration,
       callback: ()=>{
         this.finishGame();
       }
     })
+  
+    // タイマーのテキスト
+    this.add.text(540, 60, 'Time Limit :', { fontFamily: 'font1', fontSize: '20px', color: 'black' })
+
+    // カウントダウンタイマー
+    this.countdownTimer = this.add.text(
+      660,
+      60,
+      `${this.timelimitDuration / 1000}`,
+      { fontFamily: 'font1', fontSize: '20px', color: 'black'}
+    )
     
     // スコアの画面
     this.scoreScreen = new ScoreScreen(this.add, this.tweens);
@@ -105,15 +120,18 @@ export class MyScene extends Phaser.Scene {
 
   update () {
     this.gameStart();
-   
     this.updateSpaceKey();
     this.updateRKey();
-    console.log(this.score)
+    this.updateCountdown();
   }
+
+  updateCountdown() {
+    this.countdownTimer.setText(String(Math.floor(this.timerEvent.getRemainingSeconds())))
+  };
 
   updateRKey(): void {
     this.isRKeyPressed = Phaser.Input.Keyboard.JustDown(this.RKey);
-  }
+  };
 
   updateScore():void {
     this.score++;
@@ -142,7 +160,7 @@ export class MyScene extends Phaser.Scene {
 
   timer(): void {
     this.timerEvent.reset({
-      delay: 10000,
+      delay: this.timelimitDuration,
       callback: ()=>{
         this.finishGame();
       }

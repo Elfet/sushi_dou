@@ -40,7 +40,7 @@ export class ScoreScreen {
 
   displayScore(score: number) {
     const text: Phaser.GameObjects.Text = this.add.text(
-      275,
+      270,
       70,
       `SCORE   :   ${score}`,
       { fontFamily: 'font1', fontSize: '40px', color: 'white'}
