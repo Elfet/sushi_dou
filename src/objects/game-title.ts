@@ -17,7 +17,7 @@ export class GameTitle {
     this.gameExplanation = add.text(
       135,
       225,
-      'You   are   a   chef   at   a   Sushi   Restaurant .\nCustomers   want   food   made   of   fresh   raw   fish .\nChoose   right   ingredients   for   their   order\nand   be   as   quick   as   you   can   to   serve   them !',
+      'You   are   a   chef   at   a   Sushi   Restaurant .\nCustomers   want   food   made   of   fresh   raw   fish .\nChoose   the   right   ingredients   for   their   order\nand   be   as   quick   as   you   can   to   serve   them !',
       { fontFamily: 'font1', fontSize: '18px', color: 'white'}
     )
     this.gameExplanation.depth = 4;

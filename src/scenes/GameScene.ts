@@ -8,9 +8,8 @@ import { OrderEmote } from "../objects/charactors/order-emote";
 import { ReactionEmote } from "../objects/charactors/reaction-emote";
 import { GameTitle } from "../objects/game-title";
 import { ScoreScreen } from "../objects/score-screen";
-import { GameScene } from "./GameScene";
 
-export class MyScene extends Phaser.Scene {
+export class GameScene extends Phaser.Scene {
   private player!: Player;
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private isSpacePressed!: boolean;
@@ -59,7 +58,7 @@ export class MyScene extends Phaser.Scene {
 
 
   constructor() {
-    super({ key: 'myscene' });
+    super({ key: 'gameScene' });
     this.didGameStart = false;
   }
 
@@ -104,7 +103,6 @@ export class MyScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.add('gameScene', GameScene, true, {x: 400, y: 300})
     // World生成
     this.add.image(400, 300, 'map').setScale(1.5);
     this.physics.world.setBounds(90, 80, 622, 495);
@@ -210,7 +208,6 @@ export class MyScene extends Phaser.Scene {
       this.checkFoodOrder();
     }
     this.updateSpaceKey();
-    console.log(this.didGameStart)
   }
 
   gameStart(): void {
@@ -225,7 +222,7 @@ export class MyScene extends Phaser.Scene {
     this.didGameStart = false;
     this.scoreScreen.displayAll();
     this.scoreScreen.displayScore(this.score);
-    this.plugin.pause('gameScene');
+    this.plugin.pause();
   };
 
   timer() {
