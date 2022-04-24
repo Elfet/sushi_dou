@@ -6,6 +6,8 @@ import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
 import { OrderEmote } from "../objects/charactors/order-emote";
 import { ReactionEmote } from "../objects/charactors/reaction-emote";
+import { GameTitle } from "../objects/game-title";
+import { ScoreScreen } from "../objects/score-screen";
 
 export class MyScene extends Phaser.Scene {
   private player!: Player;
@@ -45,8 +47,16 @@ export class MyScene extends Phaser.Scene {
   private sound_wrong!: Phaser.Sound.BaseSound;
   private sound_select_food!: Phaser.Sound.BaseSound;
 
+  // ゲームスタート関連
+  private titleScreen!: GameTitle;
+  private didGameStart!: boolean;
+  private timerEvent!: Phaser.Time.TimerEvent;
+  // スコア画面
+  private scoreScreen!: ScoreScreen;
+
   constructor() {
     super({ key: 'myscene' });
+    this.didGameStart = false;
   }
 
   preload() {
@@ -66,6 +76,8 @@ export class MyScene extends Phaser.Scene {
     this.load.image('emote_happy', 'src/assets/characters/emote_happy.png');
     this.load.image('emote_heart', 'src/assets/characters/emote_heart.png');
     this.load.image('emote_tear', 'src/assets/characters/emote_tear.png');
+    this.load.image('title_bg', 'src/assets/maps/title_background.png');
+    this.load.image('score_bg', 'src/assets/maps/score_background.png');
     this.load.spritesheet(
       'player',
       'src/assets/characters/Chef_Alex_48x48.png',
@@ -156,25 +168,68 @@ export class MyScene extends Phaser.Scene {
     this.sound_correct = this.sound.add('correct', {volume: 0.07});
     this.sound_wrong = this.sound.add('wrong', {volume: 0.07});
     this.sound_select_food = this.sound.add('select_food', {volume: 0.04});
+
+    // タイトル画面
+    this.titleScreen = new GameTitle(this.add, this.tweens);
+
+    this.timerEvent = new Phaser.Time.TimerEvent({
+      delay: 10000,
+      callback: ()=>{
+        this.finishGame();
+      }
+    })
+
+    // スコアの画面
+    this.scoreScreen = new ScoreScreen(this.add);
   }
 
   update () {
-    // playerの行動
-    this.player.onDownPlayerBehavior(this.cursors);
-    // foodのstate check
-    this.checkFoodSelected();
-    // Npcのアニメーション
-    this.updateNpcAnimation(this.npc_0);
-    this.updateNpcAnimation(this.npc_1);
-    this.updateNpcAnimation(this.npc_2);
-    this.updateNpcAnimation(this.npc_3);
-    this.updateNpcAnimation(this.npc_4);
-    this.updateNpcAnimation(this.npc_5);
-    this.updateNpcAnimation(this.npc_6);
+    this.gameStart();
+    if (this.didGameStart) {
+      // playerの行動
+      this.player.onDownPlayerBehavior(this.cursors);
+      // foodのstate check
+      this.checkFoodSelected();
+      // Npcのアニメーション
+      this.updateNpcAnimation(this.npc_0);
+      this.updateNpcAnimation(this.npc_1);
+      this.updateNpcAnimation(this.npc_2);
+      this.updateNpcAnimation(this.npc_3);
+      this.updateNpcAnimation(this.npc_4);
+      this.updateNpcAnimation(this.npc_5);
+      this.updateNpcAnimation(this.npc_6);
 
-    this.checkFoodOrder();
+      this.checkFoodOrder();
+      console.log(this.didGameStart)
+    }
     this.updateSpaceKey();
   }
+
+  
+
+  gameStart(): void {
+    if (this.isSpacePressed) {
+      this.didGameStart = true;
+      this.titleScreen.hideAll();
+      this.timer();
+    }
+  };
+
+  finishGame(): void {
+    this.didGameStart = false;
+    this.scoreScreen.displayAll();
+    this.scoreScreen.displayScore(this.score);
+  };
+
+  timer() {
+    this.timerEvent.reset({
+      delay: 10000,
+      callback: ()=>{
+        this.finishGame();
+      }
+    });
+    this.time.addEvent(this.timerEvent);
+  };
 
   updateSpaceKey(): void{
     this.isSpacePressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);

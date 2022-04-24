@@ -49,6 +49,8 @@ export class Npc{
     this.didAnimationEnd = true;
     this.onWhichChair = '';
     this.isServedFood = false;
+    // 初期状態は非表示
+    this.updateVisible(false);
 
     // npcのアニメーション
     this.sprite.anims.create({
