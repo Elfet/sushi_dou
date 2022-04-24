@@ -8,6 +8,7 @@ import { OrderEmote } from "../objects/charactors/order-emote";
 import { ReactionEmote } from "../objects/charactors/reaction-emote";
 import { GameTitle } from "../objects/game-title";
 import { ScoreScreen } from "../objects/score-screen";
+import { scoreCenter } from "./score-center";
 
 export class GameScene extends Phaser.Scene {
   private player!: Player;
@@ -42,15 +43,12 @@ export class GameScene extends Phaser.Scene {
   private score!: number;
 
   private foodMenu!: {[foodName: string]: Food[]};
-  private music!: Phaser.Sound.BaseSound;
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
   private sound_select_food!: Phaser.Sound.BaseSound;
 
   // ゲームスタート関連
   private titleScreen!: GameTitle;
-  private didGameStart!: boolean;
-  private timerEvent!: Phaser.Time.TimerEvent;
   // スコア画面
   private scoreScreen!: ScoreScreen;
   // プラグイン
@@ -59,47 +57,6 @@ export class GameScene extends Phaser.Scene {
 
   constructor() {
     super({ key: 'gameScene' });
-    this.didGameStart = false;
-  }
-
-  preload() {
-    this.load.image("map", "src/assets/maps/map_01.png");
-    this.load.image("table", "src/assets/maps/counter_table.png");
-    this.load.image('egg', 'src/assets/foods/egg.png');
-    this.load.image('salmon', 'src/assets/foods/salmon.png');
-    this.load.image('shrimp', 'src/assets/foods/shrimp.png');
-    this.load.image('tuna', 'src/assets/foods/tuna.png');
-    this.load.image('rice', 'src/assets/foods/rice.png');
-    this.load.image('egg_nigiri', 'src/assets/foods/egg_nigiri.png');
-    this.load.image('salmon-nigiri', 'src/assets/foods/salmon-nigiri.png');
-    this.load.image('tuna_nigiri', 'src/assets/foods/tuna_nigiri.png');
-    this.load.image('shrimp_nigiri', 'src/assets/foods/shrimp_nigiri.png');
-    this.load.image('sashimi_set', 'src/assets/foods/sashimi_set.png');
-    this.load.image('emote_base', 'src/assets/characters/emote_base.png');
-    this.load.image('emote_happy', 'src/assets/characters/emote_happy.png');
-    this.load.image('emote_heart', 'src/assets/characters/emote_heart.png');
-    this.load.image('emote_tear', 'src/assets/characters/emote_tear.png');
-    this.load.image('title_bg', 'src/assets/maps/title_background.png');
-    this.load.image('score_bg', 'src/assets/maps/score_background.png');
-    this.load.spritesheet(
-      'player',
-      'src/assets/characters/Chef_Alex_48x48.png',
-      { frameWidth: 48, frameHeight: 96}
-    );
-    this.load.image("chair", "src/assets/maps/chair.png");
-    this.load.spritesheet('npc_0', 'src/assets/characters/npc_female_0.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_1', 'src/assets/characters/npc_female_1.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_2', 'src/assets/characters/npc_female_2.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_3', 'src/assets/characters/npc_male_0.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_4', 'src/assets/characters/npc_male_1.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_5', 'src/assets/characters/npc_male_2.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_6', 'src/assets/characters/npc_male_3.png', { frameWidth: 48, frameHeight: 96 });
-    // 音楽
-    this.load.audio('game-bgm', 'src/assets/music-sound/game-bgm_0.ogg');
-    // 効果音
-    this.load.audio('correct', 'src/assets/music-sound/sound-correct.mp3');
-    this.load.audio('wrong', 'src/assets/music-sound/sound-wrong.mp3');
-    this.load.audio('select_food', 'src/assets/music-sound/sound-select-food.mp3');
   }
 
   create() {
@@ -164,75 +121,39 @@ export class GameScene extends Phaser.Scene {
       'egg_nigiri': [this.egg, this.rice],
       'sashimi_set': [this.salmon, this.tuna],
     }
-    this.music = this.sound.add('game-bgm', {volume: 0.06, rate: 1.25, detune: -10, loop: true});
-
-    this.music.play();
     // 効果音
     this.sound_correct = this.sound.add('correct', {volume: 0.07});
     this.sound_wrong = this.sound.add('wrong', {volume: 0.07});
     this.sound_select_food = this.sound.add('select_food', {volume: 0.04});
-
-    // タイトル画面
-    this.titleScreen = new GameTitle(this.add, this.tweens);
-
-    this.timerEvent = new Phaser.Time.TimerEvent({
-      delay: 10000,
-      callback: ()=>{
-        this.finishGame();
-      }
-    })
-
-    // スコアの画面
-    this.scoreScreen = new ScoreScreen(this.add);
-
-    // プラグイン
-    this.plugin = new Phaser.Scenes.ScenePlugin(this);
   }
 
   update () {
-    this.gameStart();
-    if (this.didGameStart) {
-      // playerの行動
-      this.player.onDownPlayerBehavior(this.cursors);
-      // foodのstate check
-      this.checkFoodSelected();
-      // Npcのアニメーション
-      this.updateNpcAnimation(this.npc_0);
-      this.updateNpcAnimation(this.npc_1);
-      this.updateNpcAnimation(this.npc_2);
-      this.updateNpcAnimation(this.npc_3);
-      this.updateNpcAnimation(this.npc_4);
-      this.updateNpcAnimation(this.npc_5);
-      this.updateNpcAnimation(this.npc_6);
-
-      this.checkFoodOrder();
-    }
+    // playerの行動
+    this.player.onDownPlayerBehavior(this.cursors);
+    // foodのstate check
+    this.checkFoodSelected();
+    // Npcのアニメーション
+    this.updateNpcAnimation(this.npc_0);
+    this.updateNpcAnimation(this.npc_1);
+    this.updateNpcAnimation(this.npc_2);
+    this.updateNpcAnimation(this.npc_3);
+    this.updateNpcAnimation(this.npc_4);
+    this.updateNpcAnimation(this.npc_5);
+    this.updateNpcAnimation(this.npc_6);
+    this.checkFoodOrder();
     this.updateSpaceKey();
   }
 
   gameStart(): void {
     if (this.isSpacePressed) {
-      this.didGameStart = true;
       this.titleScreen.hideAll();
-      this.timer();
     }
   };
 
   finishGame(): void {
-    this.didGameStart = false;
     this.scoreScreen.displayAll();
     this.scoreScreen.displayScore(this.score);
     this.plugin.pause();
-  };
-
-  timer() {
-    this.timerEvent.reset({
-      delay: 10000,
-      callback: ()=>{
-        this.finishGame();
-      }
-    });
-    this.time.addEvent(this.timerEvent);
   };
 
   updateSpaceKey(): void{
@@ -435,6 +356,7 @@ export class GameScene extends Phaser.Scene {
     if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
       this.score++;
       this.displayScore.setText(String(this.score));
+      scoreCenter.emit('update-score', this.score);
       reactionEmote.playHappyEmoteAnim();
       this.sound_correct.play();
     }
