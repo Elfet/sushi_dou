@@ -6,8 +6,6 @@ import { Player } from "../objects/charactors/player";
 import { Food } from '../objects/foods/food';
 import { OrderEmote } from "../objects/charactors/order-emote";
 import { ReactionEmote } from "../objects/charactors/reaction-emote";
-import { GameTitle } from "../objects/game-title";
-import { ScoreScreen } from "../objects/score-screen";
 import { scoreCenter } from "./score-center";
 
 export class GameScene extends Phaser.Scene {
@@ -46,14 +44,6 @@ export class GameScene extends Phaser.Scene {
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
   private sound_select_food!: Phaser.Sound.BaseSound;
-
-  // ゲームスタート関連
-  private titleScreen!: GameTitle;
-  // スコア画面
-  private scoreScreen!: ScoreScreen;
-  // プラグイン
-  private plugin!: Phaser.Scenes.ScenePlugin;
-
 
   constructor() {
     super({ key: 'gameScene' });
@@ -143,18 +133,6 @@ export class GameScene extends Phaser.Scene {
     this.checkFoodOrder();
     this.updateSpaceKey();
   }
-
-  gameStart(): void {
-    if (this.isSpacePressed) {
-      this.titleScreen.hideAll();
-    }
-  };
-
-  finishGame(): void {
-    this.scoreScreen.displayAll();
-    this.scoreScreen.displayScore(this.score);
-    this.plugin.pause();
-  };
 
   updateSpaceKey(): void{
     this.isSpacePressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
