@@ -131,11 +131,13 @@ export class NpcAnim{
     updateChairState: Function,
     updateTimebarVisible: Function,
     hideEmote: Function,
+    npcTimerStart: Function,
   ):object {
     return {
       onStart: ()=>{
         this.npc.play({key: 'sit', repeat: -1});
         updateOnWhichChair(chair);
+        npcTimerStart();
       },
       targets: this.npc,
       y: this.chairY,
@@ -183,6 +185,7 @@ export class NpcAnim{
     hideEmote: Function,
     updateIsLeaving: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -215,6 +218,7 @@ export class NpcAnim{
         updateChairState,
         updateTimebarVisible,
         hideEmote,
+        npcTimerStart,
       ),
       // 帰る
       this.walkDown(updateIsLeaving, playTearEmoteAnim),
@@ -250,6 +254,7 @@ export class NpcAnim{
     hideEmote: Function,
     updateIsLeaving: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -282,6 +287,7 @@ export class NpcAnim{
         updateChairState,
         updateTimebarVisible,
         hideEmote,
+        npcTimerStart,
       ),
       // 帰る
       this.walkDown(updateIsLeaving, playTearEmoteAnim),
@@ -317,6 +323,7 @@ export class NpcAnim{
     hideEmote: Function,
     updateIsLeaving: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ): Array<object> {
     return [
       this.comeIn(
@@ -349,6 +356,7 @@ export class NpcAnim{
         updateChairState,
         updateTimebarVisible,
         hideEmote,
+        npcTimerStart,
       ),
       // 帰る
       this.walkDown(updateIsLeaving, playTearEmoteAnim),

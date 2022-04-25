@@ -49,6 +49,8 @@ export class Npc{
     this.didAnimationEnd = true;
     this.onWhichChair = '';
     this.isServedFood = false;
+    // 初期状態は非表示
+    this.updateVisible(false);
 
     // npcのアニメーション
     this.sprite.anims.create({
@@ -147,6 +149,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -164,6 +167,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
@@ -175,6 +179,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -192,6 +197,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
@@ -203,6 +209,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -220,6 +227,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
