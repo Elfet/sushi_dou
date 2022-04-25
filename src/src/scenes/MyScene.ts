@@ -6,16 +6,16 @@ import { scoreCenter } from "./score-center";
 
 import map from '../assets/maps/map_01.png';
 import counterTable from '../assets/maps/counter_table.png';
-import egg from '../assets/foods/egg.png';
-import salmon from '../assets/foods/salmon.png';
-import shrimp from '../assets/foods/shrimp.png';
-import tuna from '../assets/foods/tuna.png';
-import rice from '../assets/foods/rice.png';
-import eggNigiri from '../assets/foods/egg_nigiri.png';
-import salmongNigiri from '../assets/foods/salmon-nigiri.png';
-import tunaNigiri from '../assets/foods/tuna_nigiri.png';
-import shrimpNigiri from '../assets/foods/shrimp_nigiri.png';
-import sashimiSet from '../assets/foods/sashimi_set.png';
+// import egg from 'https://hashimoto.infura-ipfs.io/ipfs/QmeNGWA2Xi86zv7nJNRk7jdbSRJ42RBjbVzuaxzFzqYJfK/egg.png';
+// import salmon from '../assets/foods/salmon.png';
+// import shrimp from '../assets/foods/shrimp.png';
+// import tuna from '../assets/foods/tuna.png';
+// import rice from '../assets/foods/rice.png';
+// import eggNigiri from '../assets/foods/egg_nigiri.png';
+// import salmongNigiri from '../assets/foods/salmon-nigiri.png';
+// import tunaNigiri from '../assets/foods/tuna_nigiri.png';
+// import shrimpNigiri from '../assets/foods/shrimp_nigiri.png';
+// import sashimiSet from '../assets/foods/sashimi_set.png';
 import emoteBase from '../assets/characters/emote_base.png';
 import emoteHappy from '../assets/characters/emote_happy.png';
 import emoteHeart from '../assets/characters/emote_heart.png';
@@ -32,9 +32,9 @@ import npcMale1 from '../assets/characters/npc_male_1.png';
 import npcMale2 from '../assets/characters/npc_male_2.png';
 import npcMale3 from '../assets/characters/npc_male_3.png';
 import bgm from '../assets/music-sound/game-bgm_0.ogg';
-import soundCorrect from '../assets/music-sound/sound-correct.mp3';
-import soundWrong from '../assets/music-sound/sound-wrong.mp3';
-import soundSelectFood from '../assets/music-sound/sound-select-food.mp3';
+// import soundCorrect from '../assets/music-sound/sound-correct.mp3';
+// import soundWrong from '../assets/music-sound/sound-wrong.mp3';
+// import soundSelectFood from '../assets/music-sound/sound-select-food.mp3';
 
 
 export class MyScene extends Phaser.Scene {
@@ -59,18 +59,23 @@ export class MyScene extends Phaser.Scene {
   }
 
   preload() {
+
+    const foodAssetsPath: string = 'https://hashimoto.infura-ipfs.io/ipfs/QmeNGWA2Xi86zv7nJNRk7jdbSRJ42RBjbVzuaxzFzqYJfK';
+    const soundAssetsPath: string = 'https://hashimoto.infura-ipfs.io/ipfs/QmST8VHuHot3L5P8cGsBYABX6dovQwuryRpB15stgx8ow7';
+
     this.textures.addBase64('map', map);
-    this.textures.addBase64('egg', egg);
     this.textures.addBase64('table', counterTable);
-    this.textures.addBase64('salmon', salmon);
-    this.textures.addBase64('shrimp', shrimp);
-    this.textures.addBase64('tuna', tuna);
-    this.textures.addBase64('rice', rice);
-    this.textures.addBase64('egg_nigiri', eggNigiri);
-    this.textures.addBase64('salmon-nigiri', salmongNigiri);
-    this.textures.addBase64('tuna_nigiri', tunaNigiri);
-    this.textures.addBase64('shrimp_nigiri', shrimpNigiri);
-    this.textures.addBase64('sashimi_set', sashimiSet);
+    this.load.setCORS('anonymous');
+    this.load.image('egg', `${foodAssetsPath}/egg.png`);
+    this.load.image('salmon', `${foodAssetsPath}/salmon.png`);
+    this.load.image('shrimp', `${foodAssetsPath}/shrimp.png`);
+    this.load.image('tuna', `${foodAssetsPath}/tuna.png`);
+    this.load.image('rice', `${foodAssetsPath}/rice.png`);
+    this.load.image('egg_nigiri', `${foodAssetsPath}/egg_nigiri.png`);
+    this.load.image('salmon-nigiri', `${foodAssetsPath}/salmon-nigiri.png`);
+    this.load.image('tuna_nigiri', `${foodAssetsPath}/tuna_nigiri.png`);
+    this.load.image('shrimp_nigiri', `${foodAssetsPath}/shrimp_nigiri.png`);
+    this.load.image('sashimi_set', `${foodAssetsPath}/sashimi_set.png`);
     this.textures.addBase64('emote_base', emoteBase);
     this.textures.addBase64('emote_happy', emoteHappy);
     this.textures.addBase64('emote_heart', emoteHeart);
@@ -89,9 +94,9 @@ export class MyScene extends Phaser.Scene {
     // 音楽
     this.load.audio('game-bgm', bgm);
     // 効果音
-    this.load.audio('correct', soundCorrect);
-    this.load.audio('wrong', soundWrong);
-    this.load.audio('select_food', soundSelectFood);
+    this.load.audio('correct', `${soundAssetsPath}/sound-correct.mp3`);
+    this.load.audio('wrong', `${soundAssetsPath}/sound-wrong.mp3`);
+    this.load.audio('select_food', `${soundAssetsPath}/sound-select-food.mp3`);
   }
 
   create() {
