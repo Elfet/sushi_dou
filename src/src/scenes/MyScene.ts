@@ -6,16 +6,6 @@ import { scoreCenter } from "./score-center";
 
 import map from '../assets/maps/map_01.png';
 import counterTable from '../assets/maps/counter_table.png';
-// import egg from 'https://hashimoto.infura-ipfs.io/ipfs/QmeNGWA2Xi86zv7nJNRk7jdbSRJ42RBjbVzuaxzFzqYJfK/egg.png';
-// import salmon from '../assets/foods/salmon.png';
-// import shrimp from '../assets/foods/shrimp.png';
-// import tuna from '../assets/foods/tuna.png';
-// import rice from '../assets/foods/rice.png';
-// import eggNigiri from '../assets/foods/egg_nigiri.png';
-// import salmongNigiri from '../assets/foods/salmon-nigiri.png';
-// import tunaNigiri from '../assets/foods/tuna_nigiri.png';
-// import shrimpNigiri from '../assets/foods/shrimp_nigiri.png';
-// import sashimiSet from '../assets/foods/sashimi_set.png';
 import emoteBase from '../assets/characters/emote_base.png';
 import emoteHappy from '../assets/characters/emote_happy.png';
 import emoteHeart from '../assets/characters/emote_heart.png';
@@ -32,10 +22,6 @@ import npcMale1 from '../assets/characters/npc_male_1.png';
 import npcMale2 from '../assets/characters/npc_male_2.png';
 import npcMale3 from '../assets/characters/npc_male_3.png';
 import bgm from '../assets/music-sound/game-bgm_0.ogg';
-// import soundCorrect from '../assets/music-sound/sound-correct.mp3';
-// import soundWrong from '../assets/music-sound/sound-wrong.mp3';
-// import soundSelectFood from '../assets/music-sound/sound-select-food.mp3';
-
 
 export class MyScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
