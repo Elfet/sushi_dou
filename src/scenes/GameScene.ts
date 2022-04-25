@@ -44,6 +44,11 @@ export class GameScene extends Phaser.Scene {
   private sound_correct!: Phaser.Sound.BaseSound;
   private sound_wrong!: Phaser.Sound.BaseSound;
   private sound_select_food!: Phaser.Sound.BaseSound;
+  // スコア計算のためのnpcタイマー。アニメーションには関与しない
+  private npcTimerEvent_0!: Phaser.Time.TimerEvent;
+  private npcTimerEvent_1!: Phaser.Time.TimerEvent;
+  private npcTimerEvent_2!: Phaser.Time.TimerEvent;
+  private npcWaitDuraion!: number;
 
   constructor() {
     super({ key: 'gameScene' });
@@ -99,10 +104,22 @@ export class GameScene extends Phaser.Scene {
     this.reactionEmote_1 = new ReactionEmote(400, this.add, this.tweens);
     this.reactionEmote_2 = new ReactionEmote(600, this.add, this.tweens);
 
+    // npcの待ち時間 npcインスタンスから取ってくる
+    this.npcWaitDuraion = this.npc_0.getWaitTime();
+
+    this.npcTimerEvent_0 = new Phaser.Time.TimerEvent({})
+
+    this.npcTimerEvent_1 = new Phaser.Time.TimerEvent({})
+
+    this.npcTimerEvent_2 = new Phaser.Time.TimerEvent({})
+
     // scoreテキスト
     this.add.text(540, 30, 'SCORE :', { fontFamily: 'font1', fontSize: '20px', color: 'black' });
     this.displayScore = this.add.text(640, 30, '0', { fontFamily: 'font1', fontSize: '20px', color: 'black' });
     this.score = 0;
+
+    // スコアのグローバル管理
+    this.registry.set({score: this.score}, 'score')
 
     this.foodMenu = {
       'salmon_nigiri': [this.salmon, this.rice],
@@ -138,6 +155,22 @@ export class GameScene extends Phaser.Scene {
     this.isSpacePressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
   };
 
+  // npcが座るときスタートさせる
+  npcTimerStart(timerEvent: Phaser.Time.TimerEvent): void {
+    timerEvent.reset({
+      delay: this.npcWaitDuraion,
+      callback: ()=>{
+        this.npcTimerStop(timerEvent);
+      }
+    });
+    this.time.addEvent(timerEvent);
+  };
+
+  // オーダーが提供されればタイマーは必要なくなるので取り除く（止める）
+  npcTimerStop(timerEvent: Phaser.Time.TimerEvent): void {
+    this.time.removeEvent(timerEvent);
+  };
+
   updateNpcAnimation(npc: Npc):void {
     // アニメーションの生成
     if (npc.getDidAnimationEnd() && !this.chair_0.getIsTaken()) {
@@ -148,6 +181,7 @@ export class GameScene extends Phaser.Scene {
         ()=>{this.orderEmote_0.displayEmote(npc.getOrder())},
         ()=>{this.orderEmote_0.hideEmote()},
         ()=>{this.reactionEmote_0.playTearEmoteAnim()},
+        ()=>{this.npcTimerStart(this.npcTimerEvent_0)},
         )
       npc.animation1 = npc.forceLeaveChair_0(
         (state: boolean)=>{this.chair_0.updateState(state)},
@@ -164,6 +198,7 @@ export class GameScene extends Phaser.Scene {
         ()=>{this.orderEmote_1.displayEmote(npc.getOrder())},
         ()=>{this.orderEmote_1.hideEmote()},
         ()=>{this.reactionEmote_1.playTearEmoteAnim()},
+        ()=>{this.npcTimerStart(this.npcTimerEvent_1)},
         )
       npc.animation3 = npc.forceLeaveChair_1(
         (state: boolean)=>{this.chair_1.updateState(state)},
@@ -180,6 +215,7 @@ export class GameScene extends Phaser.Scene {
         ()=>{this.orderEmote_2.displayEmote(npc.getOrder())},
         ()=>{this.orderEmote_2.hideEmote()},
         ()=>{this.reactionEmote_2.playTearEmoteAnim()},
+        ()=>{this.npcTimerStart(this.npcTimerEvent_2)},
         )
       npc.animation5 = npc.forceLeaveChair_2(
         (state: boolean)=>{this.chair_2.updateState(state)},
@@ -233,6 +269,13 @@ export class GameScene extends Phaser.Scene {
       npc.updateVisible(false);
     }
   };
+
+  // スコアの計算
+  calcScore(timerEvent: Phaser.Time.TimerEvent) {
+    this.score = this.score + 1 + Math.floor(timerEvent.getRemainingSeconds());
+    // スコアマネジャーの値も更新
+    this.registry.values.score = this.score;
+  }
 
   checkFoodSelected() {
     if (this.isSpacePressed) {
@@ -307,34 +350,37 @@ export class GameScene extends Phaser.Scene {
         playerPositionY >= 212 && playerPositionY < 232
       ){
         if (!this.chair_0.getNpcOnChair()?.getIsOnChair()) return;
-        this.judgeServeFood(this.chair_0, this.reactionEmote_0);
+        this.judgeServeFood(this.chair_0, this.reactionEmote_0, this.npcTimerEvent_0);
       }
       else if ( 
         playerPositionX >= 350 && playerPositionX < 450 && 
         playerPositionY >= 212 && playerPositionY < 232
       ){
         if (!this.chair_1.getNpcOnChair()?.getIsOnChair()) return;
-        this.judgeServeFood(this.chair_1, this.reactionEmote_1);
+        this.judgeServeFood(this.chair_1, this.reactionEmote_1, this.npcTimerEvent_1);
       }
       else if ( 
         playerPositionX >= 550 && playerPositionX < 650 && 
         playerPositionY >= 212 && playerPositionY < 232
       ){
         if (!this.chair_2.getNpcOnChair()?.getIsOnChair()) return;
-        this.judgeServeFood(this.chair_2, this.reactionEmote_2);
+        this.judgeServeFood(this.chair_2, this.reactionEmote_2, this.npcTimerEvent_2);
       }
     }
   }
 
-  judgeServeFood(chair: Chair, reactionEmote: ReactionEmote): void {
+  judgeServeFood(chair: Chair, reactionEmote: ReactionEmote, timerEvent: Phaser.Time.TimerEvent): void {
     const orderedFood = chair.getNpcOnChair()!.getOrder();
     const npcOrderedMenu = this.foodMenu[orderedFood].sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
     const playerSelectedMenu = this.player.getSelectedFoods().sort((a, b)=>a.getFoodName()>b.getFoodName() ? -1 : 1)
 
+    // スコア計算のために正誤に関係なくnpcのタイマーを止める
+    this.npcTimerStop(timerEvent);
+
     if (npcOrderedMenu.every((food, index) => food == playerSelectedMenu[index])) {
-      this.score++;
+      this.calcScore(timerEvent);
       this.displayScore.setText(String(this.score));
-      scoreCenter.emit('update-score', this.score);
+      scoreCenter.emit('update-score');
       reactionEmote.playHappyEmoteAnim();
       this.sound_correct.play();
     }

@@ -67,7 +67,7 @@ export class MyScene extends Phaser.Scene {
 
   create() {
     // 制限時間
-    this.timelimitDuration = 30000;
+    this.timelimitDuration = 10000;
 
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -77,6 +77,7 @@ export class MyScene extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    // スコア管理
     scoreCenter.on('update-score', this.updateScore, this);
 
     this.score = 0;
@@ -90,6 +91,7 @@ export class MyScene extends Phaser.Scene {
 
     this.isGameHappning = false;
 
+    // タイマーイベント
     this.timerEvent = new Phaser.Time.TimerEvent({
       delay: this.timelimitDuration,
       callback: ()=>{
@@ -123,7 +125,7 @@ export class MyScene extends Phaser.Scene {
     this.updateSpaceKey();
     this.updateRKey();
     this.updateCountdown();
-  }
+  };
 
   updateCountdown() {
     this.countdownTimer.setText(String(Math.floor(this.timerEvent.getRemainingSeconds())))
@@ -134,7 +136,8 @@ export class MyScene extends Phaser.Scene {
   };
 
   updateScore():void {
-    this.score++;
+    // gameSceneで更新したグローバルのスコアを参照
+    this.score = this.registry.get('score');
   };
 
   gameStart(): void {

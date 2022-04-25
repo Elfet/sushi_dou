@@ -149,6 +149,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ): Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -166,6 +167,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
@@ -177,6 +179,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -194,6 +197,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
@@ -205,6 +209,7 @@ export class Npc{
     displayOrderEmote: Function,
     hideOrderEmote: Function,
     playTearEmoteAnim: Function,
+    npcTimerStart: Function,
   ):Phaser.Tweens.Timeline {
     return this.tweens.createTimeline({
       paused: true,
@@ -222,6 +227,7 @@ export class Npc{
         hideOrderEmote,
         (state: boolean)=>{this.updateIsLeaving(state)},
         playTearEmoteAnim,
+        npcTimerStart,
       )
     })
   };
