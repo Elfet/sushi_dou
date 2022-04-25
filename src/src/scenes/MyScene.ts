@@ -4,6 +4,39 @@ import { ScoreScreen } from "../objects/score-screen";
 import { GameScene } from "./GameScene";
 import { scoreCenter } from "./score-center";
 
+import map from '../assets/maps/map_01.png';
+import counterTable from '../assets/maps/counter_table.png';
+import egg from '../assets/foods/egg.png';
+import salmon from '../assets/foods/salmon.png';
+import shrimp from '../assets/foods/shrimp.png';
+import tuna from '../assets/foods/tuna.png';
+import rice from '../assets/foods/rice.png';
+import eggNigiri from '../assets/foods/egg_nigiri.png';
+import salmongNigiri from '../assets/foods/salmon-nigiri.png';
+import tunaNigiri from '../assets/foods/tuna_nigiri.png';
+import shrimpNigiri from '../assets/foods/shrimp_nigiri.png';
+import sashimiSet from '../assets/foods/sashimi_set.png';
+import emoteBase from '../assets/characters/emote_base.png';
+import emoteHappy from '../assets/characters/emote_happy.png';
+import emoteHeart from '../assets/characters/emote_heart.png';
+import emoteTear from '../assets/characters/emote_tear.png';
+import chair from '../assets/maps/chair.png';
+import title_background from '../assets/maps/title_background.png';
+import score_background from '../assets/maps/score_background.png';
+import chef from '../assets/characters/Chef_Alex_48x48.png';
+import npcFemale0 from '../assets/characters/npc_female_0.png';
+import npcFemale1 from '../assets/characters/npc_female_1.png';
+import npcFemale2 from '../assets/characters/npc_female_2.png';
+import npcMale0 from '../assets/characters/npc_male_0.png';
+import npcMale1 from '../assets/characters/npc_male_1.png';
+import npcMale2 from '../assets/characters/npc_male_2.png';
+import npcMale3 from '../assets/characters/npc_male_3.png';
+import bgm from '../assets/music-sound/game-bgm_0.ogg';
+import soundCorrect from '../assets/music-sound/sound-correct.mp3';
+import soundWrong from '../assets/music-sound/sound-wrong.mp3';
+import soundSelectFood from '../assets/music-sound/sound-select-food.mp3';
+
+
 export class MyScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private isSpacePressed!: boolean;
@@ -26,43 +59,39 @@ export class MyScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("map", "src/assets/maps/map_01.png");
-    this.load.image("table", "src/assets/maps/counter_table.png");
-    this.load.image('egg', 'src/assets/foods/egg.png');
-    this.load.image('salmon', 'src/assets/foods/salmon.png');
-    this.load.image('shrimp', 'src/assets/foods/shrimp.png');
-    this.load.image('tuna', 'src/assets/foods/tuna.png');
-    this.load.image('rice', 'src/assets/foods/rice.png');
-    this.load.image('egg_nigiri', 'src/assets/foods/egg_nigiri.png');
-    this.load.image('salmon-nigiri', 'src/assets/foods/salmon-nigiri.png');
-    this.load.image('tuna_nigiri', 'src/assets/foods/tuna_nigiri.png');
-    this.load.image('shrimp_nigiri', 'src/assets/foods/shrimp_nigiri.png');
-    this.load.image('sashimi_set', 'src/assets/foods/sashimi_set.png');
-    this.load.image('emote_base', 'src/assets/characters/emote_base.png');
-    this.load.image('emote_happy', 'src/assets/characters/emote_happy.png');
-    this.load.image('emote_heart', 'src/assets/characters/emote_heart.png');
-    this.load.image('emote_tear', 'src/assets/characters/emote_tear.png');
-    this.load.image('title_bg', 'src/assets/maps/title_background.png');
-    this.load.image('score_bg', 'src/assets/maps/score_background.png');
-    this.load.spritesheet(
-      'player',
-      'src/assets/characters/Chef_Alex_48x48.png',
-      { frameWidth: 48, frameHeight: 96}
-    );
-    this.load.image("chair", "src/assets/maps/chair.png");
-    this.load.spritesheet('npc_0', 'src/assets/characters/npc_female_0.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_1', 'src/assets/characters/npc_female_1.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_2', 'src/assets/characters/npc_female_2.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_3', 'src/assets/characters/npc_male_0.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_4', 'src/assets/characters/npc_male_1.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_5', 'src/assets/characters/npc_male_2.png', { frameWidth: 48, frameHeight: 96 });
-    this.load.spritesheet('npc_6', 'src/assets/characters/npc_male_3.png', { frameWidth: 48, frameHeight: 96 });
+    this.textures.addBase64('map', map);
+    this.textures.addBase64('egg', egg);
+    this.textures.addBase64('table', counterTable);
+    this.textures.addBase64('salmon', salmon);
+    this.textures.addBase64('shrimp', shrimp);
+    this.textures.addBase64('tuna', tuna);
+    this.textures.addBase64('rice', rice);
+    this.textures.addBase64('egg_nigiri', eggNigiri);
+    this.textures.addBase64('salmon-nigiri', salmongNigiri);
+    this.textures.addBase64('tuna_nigiri', tunaNigiri);
+    this.textures.addBase64('shrimp_nigiri', shrimpNigiri);
+    this.textures.addBase64('sashimi_set', sashimiSet);
+    this.textures.addBase64('emote_base', emoteBase);
+    this.textures.addBase64('emote_happy', emoteHappy);
+    this.textures.addBase64('emote_heart', emoteHeart);
+    this.textures.addBase64('emote_tear', emoteTear);
+    this.textures.addBase64('chair', chair);
+    this.textures.addBase64('title_bg', title_background);
+    this.textures.addBase64('score_bg', score_background);
+    this.load.spritesheet('player', chef, { frameWidth: 48, frameHeight: 96});
+    this.load.spritesheet('npc_0', npcFemale0, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_1', npcFemale1, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_2', npcFemale2, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_3', npcMale0, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_4', npcMale1, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_5', npcMale2, { frameWidth: 48, frameHeight: 96 });
+    this.load.spritesheet('npc_6', npcMale3, { frameWidth: 48, frameHeight: 96 });
     // 音楽
-    this.load.audio('game-bgm', 'src/assets/music-sound/game-bgm_0.ogg');
+    this.load.audio('game-bgm', bgm);
     // 効果音
-    this.load.audio('correct', 'src/assets/music-sound/sound-correct.mp3');
-    this.load.audio('wrong', 'src/assets/music-sound/sound-wrong.mp3');
-    this.load.audio('select_food', 'src/assets/music-sound/sound-select-food.mp3');
+    this.load.audio('correct', soundCorrect);
+    this.load.audio('wrong', soundWrong);
+    this.load.audio('select_food', soundSelectFood);
   }
 
   create() {

@@ -3,7 +3,7 @@ export class TimeBar {
   private x: number;
   private y: number;
   private value: number;
-  private intervalId: number;
+  private intervalId!: NodeJS.Timer;
 
   constructor(
     scene: Phaser.Scene,
@@ -17,7 +17,7 @@ export class TimeBar {
     this.value = 60;
     this.draw();
     add.existing(this.bar);
-    this.intervalId = 0;
+    // this.intervalId = 0;
     // 初期状態では非表示
     this.bar.visible = false;
   }
