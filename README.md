@@ -17,9 +17,14 @@ You can login via game and save high score in your wallet. If you don't have a N
 It's deployed to 4everland.
 https://sushi_dou.4everland.app/
 
+bgm：MOMIZizm Music : https://music.storyinvention.com
+maps and characters : https://limezu.itch.io/
+
 ## Install & Build
 ```
 $ npm run build
 $ npm run dev
 ```
 access http://localhost:8080
+
+
