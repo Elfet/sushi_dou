@@ -22,8 +22,10 @@ window.Buffer = buffer.Buffer;
     changeMethods: ['setGreeting'],
   })
 
-  window.highScore = await window.contract.getGreeting({ accountId: window.accountId });
-  window.highScore = window.highScore.split(':')[1]
+  if (window.walletConnection.isSignedIn()) {
+    window.highScore = await window.contract.getGreeting({ accountId: window.accountId });
+    window.highScore = window.highScore.split(':')[1]
+  }
 
   // window.walletConnection.signOut();
 })(window);
@@ -37,5 +39,5 @@ export function isLoginNearWallet() {
 }
 
 export function getHighScore() {
-  return window.highScore || null;
+  return window.highScore || 0;
 }
