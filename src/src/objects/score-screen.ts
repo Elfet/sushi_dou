@@ -88,10 +88,10 @@ export class ScoreScreen {
     })
     // NEARにHighScoreを送るテキスト
     this.nearText3 = add.text(
-      95,
+      55,
       380,
-      'You  Can  Save  The  High  Score  If',
-      { fontFamily: 'font1', fontSize: '30px', color: 'yellow'}
+      'You  Can  Save  The  High  Score  In  Your  Wallet',
+      { fontFamily: 'font1', fontSize: '25px', color: 'yellow'}
     )
     this.nearText3.depth = 4;
     // テキストの点滅
@@ -112,10 +112,10 @@ export class ScoreScreen {
     })
     // NEARにHighScoreを送るテキスト
     this.nearText4 = add.text(
-      85,
+      120,
       430,
-      'You  Have  A  NEAR  Testnet  Account',
-      { fontFamily: 'font1', fontSize: '30px', color: 'yellow'}
+      'If  You  Have  A  NEAR  Testnet  Account',
+      { fontFamily: 'font1', fontSize: '25px', color: 'yellow'}
     )
     this.nearText4.depth = 4;
     // テキストの点滅
