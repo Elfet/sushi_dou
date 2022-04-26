@@ -101,8 +101,8 @@ export class MyScene extends Phaser.Scene {
 
   create() {
     // 制限時間
-    this.timelimitDuration = 30000;
-    
+    this.timelimitDuration = 1000;
+
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     this.QKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
