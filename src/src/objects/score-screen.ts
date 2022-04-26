@@ -6,6 +6,8 @@ export class ScoreScreen {
   private howToRestart!: Phaser.GameObjects.Text;
   private nearText0: Phaser.GameObjects.Text;
   private nearText1: Phaser.GameObjects.Text;
+  private nearText3: Phaser.GameObjects.Text;
+  private nearText4: Phaser.GameObjects.Text;
 
   constructor (
     add: Phaser.GameObjects.GameObjectFactory,
@@ -86,6 +88,54 @@ export class ScoreScreen {
         }
       ]
     })
+    // NEARにHighScoreを送るテキスト
+    this.nearText3 = add.text(
+      55,
+      380,
+      'You  Can  Save  The  High  Score  In  Your  Wallet',
+      { fontFamily: 'font1', fontSize: '25px', color: 'yellow'}
+    )
+    this.nearText3.depth = 4;
+    // テキストの点滅
+    tweens.timeline({
+      loop: -1,
+      tweens: [
+        {
+          targets: this.nearText3,
+          alpha: 0.125,
+          ease: 'Linear',
+        },
+        {
+          targets: this.nearText3,
+          alpha: 1,
+          ease: 'Power2',
+        }
+      ]
+    })
+    // NEARにHighScoreを送るテキスト
+    this.nearText4 = add.text(
+      120,
+      430,
+      'If  You  Have  A  NEAR  Testnet  Account',
+      { fontFamily: 'font1', fontSize: '25px', color: 'yellow'}
+    )
+    this.nearText4.depth = 4;
+    // テキストの点滅
+    tweens.timeline({
+      loop: -1,
+      tweens: [
+        {
+          targets: this.nearText4,
+          alpha: 0.125,
+          ease: 'Linear',
+        },
+        {
+          targets: this.nearText4,
+          alpha: 1,
+          ease: 'Power2',
+        }
+      ]
+    })
 
     // 初期状態は非表示
     this.hideAll();
@@ -125,5 +175,7 @@ export class ScoreScreen {
     this.howToRestart.visible = false;
     this.nearText0.visible = false;
     this.nearText1.visible = false;
+    this.nearText3.visible = false;
+    this.nearText4.visible = false;
   };
 }
