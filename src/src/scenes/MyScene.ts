@@ -23,12 +23,17 @@ import npcMale2 from '../assets/characters/npc_male_2.png';
 import npcMale3 from '../assets/characters/npc_male_3.png';
 import bgm from '../assets/music-sound/game-bgm_0.ogg';
 
+import { loginNearWallet, isLoginNearWallet } from '../../init';
+
 export class MyScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private isSpacePressed!: boolean;
+  private isLogin!: boolean;
   private score!: number;
   private music!: Phaser.Sound.BaseSound;
   private RKey!: Phaser.Input.Keyboard.Key;
+  private QKey!: Phaser.Input.Keyboard.Key;
+  private EKey!: Phaser.Input.Keyboard.Key;
   private isRKeyPressed!: boolean;
   private titleScreen!: GameTitle;
   private isGameHappning!: boolean;
@@ -40,8 +45,12 @@ export class MyScene extends Phaser.Scene {
   // プラグイン
   private plugin!: Phaser.Scenes.ScenePlugin;
 
+  private isGuestLogin!: boolean;
+  private isDisplayLogin!: boolean;
+
   constructor() {
     super({ key: 'myscene' });
+    this.isGuestLogin = false;
   }
 
   preload() {
@@ -91,6 +100,8 @@ export class MyScene extends Phaser.Scene {
 
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+    this.QKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+    this.EKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
 
     // ゲームシーン導入
     this.scene.add('gameScene', GameScene, true, {x: 400, y: 300});
@@ -110,6 +121,10 @@ export class MyScene extends Phaser.Scene {
     this.titleScreen = new GameTitle(this.add, this.tweens);
 
     this.isGameHappning = false;
+
+    this.isLogin = false;
+
+    this.isDisplayLogin = true;
 
     // タイマーイベント
     this.timerEvent = new Phaser.Time.TimerEvent({
@@ -138,6 +153,10 @@ export class MyScene extends Phaser.Scene {
     this.plugin.bringToTop('myscene');
     // ゲーム開始までは止めておく
     this.plugin.pause('gameScene')
+
+    this.registry.set({isLogin: {near: isLoginNearWallet(), guest: this.isGuestLogin}} , 'isLogin');
+    this.isLogin = this.registry.get('isLogin').near || this.registry.get('isLogin').guest
+    console.log(this.registry.get('isLogin'));
   }
 
   update () {
@@ -160,7 +179,25 @@ export class MyScene extends Phaser.Scene {
     this.score = this.registry.get('score');
   };
 
-  gameStart(): void {
+  async gameStart(): Promise<void> {
+    if (!this.isLogin && Phaser.Input.Keyboard.JustDown(this.EKey)) {
+      this.titleScreen.hideLoginText();
+      this.titleScreen.showAll();
+      this.isGuestLogin = true;
+      this.isLogin=true;
+      this.registry.set({'isLogin': {'near': false, 'guest': true}}, 'isLogin')
+    } else if ( !this.isLogin && Phaser.Input.Keyboard.JustDown(this.QKey) ){
+      loginNearWallet();
+    } else if (this.isLogin  && this.isDisplayLogin) {
+      this.titleScreen.hideLoginText();
+      this.titleScreen.showAll();
+      this.isDisplayLogin = false;
+    }
+
+    if (!this.isLogin) {
+      return;
+    }
+
     if (this.isSpacePressed && !this.isGameHappning && !this.plugin.isSleeping('gameScene')) {
       this.isGameHappning = true;
       this.titleScreen.hideAll();

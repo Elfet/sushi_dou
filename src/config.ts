@@ -1,6 +1,6 @@
 const CONTRACT_NAME = process.env.CONTRACT_NAME ||'near-tutorial'
 
-export function getConfig(env) {
+export function getConfig(env: string) {
   switch (env) {
     case 'production':
     case 'mainnet':
