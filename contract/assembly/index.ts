@@ -26,11 +26,11 @@ export function getGreeting(accountId: string): string | null {
   return storage.get<string>(accountId, DEFAULT_MESSAGE)
 }
 
-export function setGreeting(message: string): void {
+export function setGreeting(SushiDou_HighScore: string): void {
   const accountId = Context.sender
   // Use logging.log to record logs permanently to the blockchain!
-  logging.log(`Saving greeting "${message}" for account "${accountId}"`)
-  storage.set(accountId, message)
+  logging.log(`Saving greeting "${SushiDou_HighScore}" for account "${accountId}"`)
+  storage.set(accountId, SushiDou_HighScore)
 }
 
 export function getBlockIndex(): number {

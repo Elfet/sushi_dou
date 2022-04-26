@@ -3,6 +3,7 @@ import { GameTitle } from "../objects/game-title";
 import { ScoreScreen } from "../objects/score-screen";
 import { GameScene } from "./GameScene";
 import { scoreCenter } from "./score-center";
+import { sendHighScore } from '../../send-highscore';
 
 import map from '../assets/maps/map_01.png';
 import counterTable from '../assets/maps/counter_table.png';
@@ -30,11 +31,14 @@ export class MyScene extends Phaser.Scene {
   private isSpacePressed!: boolean;
   private isLogin!: boolean;
   private score!: number;
+  private highScore!: number;
   private music!: Phaser.Sound.BaseSound;
   private RKey!: Phaser.Input.Keyboard.Key;
   private QKey!: Phaser.Input.Keyboard.Key;
   private EKey!: Phaser.Input.Keyboard.Key;
+  private NKey!: Phaser.Input.Keyboard.Key;
   private isRKeyPressed!: boolean;
+  private isNKeyPressed!: boolean;
   private titleScreen!: GameTitle;
   private isGameHappning!: boolean;
   private timelimitDuration!: number;
@@ -51,6 +55,7 @@ export class MyScene extends Phaser.Scene {
   constructor() {
     super({ key: 'myscene' });
     this.isGuestLogin = false;
+    this.highScore = 0;
   }
 
   preload() {
@@ -97,11 +102,13 @@ export class MyScene extends Phaser.Scene {
   create() {
     // 制限時間
     this.timelimitDuration = 30000;
-
+    
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
     this.QKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.EKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    // Nキー
+    this.NKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
 
     // ゲームシーン導入
     this.scene.add('gameScene', GameScene, true, {x: 400, y: 300});
@@ -110,8 +117,14 @@ export class MyScene extends Phaser.Scene {
 
     // スコア管理
     scoreCenter.on('update-score', this.updateScore, this);
+    
+     // ハイスコアのグローバル管理
+    this.registry.set({highScore: this.highScore}, 'highScore');
+    // ハイスコア管理
+    scoreCenter.on('update-highScore', this.updateHighScore, this)
 
     this.score = 0;
+    
 
     this.music = this.sound.add('game-bgm', {volume: 0.06, rate: 1.25, detune: -10, loop: true});
 
@@ -163,7 +176,15 @@ export class MyScene extends Phaser.Scene {
     this.gameStart();
     this.updateSpaceKey();
     this.updateRKey();
+    this.updateNKey();
     this.updateCountdown();
+  };
+
+  updateHighScore():void {
+    if (this.registry.get('highScore') <= this.registry.get('score')) {
+      this.highScore = this.score;
+      this.registry.values.highScore = this.highScore;
+    }
   };
 
   updateCountdown() {
@@ -172,6 +193,10 @@ export class MyScene extends Phaser.Scene {
 
   updateRKey(): void {
     this.isRKeyPressed = Phaser.Input.Keyboard.JustDown(this.RKey);
+  };
+
+  updateNKey(): void {
+    this.isNKeyPressed = Phaser.Input.Keyboard.JustDown(this.NKey);
   };
 
   updateScore():void {
@@ -207,15 +232,20 @@ export class MyScene extends Phaser.Scene {
       this.music.stop();
       this.plugin.remove('gameScene');
       this.plugin.restart();
+    } else if (this.isNKeyPressed && this.plugin.isSleeping('gameScene')) {
+      sendHighScore(this.highScore);
     }
   };
 
   finishGame(): void {
     this.isGameHappning = false;
     this.plugin.sleep('gameScene');
+    scoreCenter.emit('update-highScore')
     this.scoreScreen.displayAll();
     this.scoreScreen.displayScore(this.score);
-    scoreCenter.removeListener('update-score', this.updateScore, this);
+    this.scoreScreen.displayHighScore(this.highScore);
+    // scoreCenter.removeListener('update-score', this.updateScore, this);
+    console.log(this.registry)
   };
 
   timer(): void {
