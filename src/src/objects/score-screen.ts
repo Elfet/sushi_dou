@@ -167,6 +167,9 @@ export class ScoreScreen {
     if ( isLoginNearWallet() ) {
       this.nearText0.visible = true;
       this.nearText1.visible = true;
+    } else {
+      this.nearText3.visible = true;
+      this.nearText4.visible = true;
     }
   };
 

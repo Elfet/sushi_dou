@@ -24,7 +24,7 @@ import npcMale2 from '../assets/characters/npc_male_2.png';
 import npcMale3 from '../assets/characters/npc_male_3.png';
 import bgm from '../assets/music-sound/game-bgm_0.ogg';
 
-import { loginNearWallet, isLoginNearWallet } from '../../init';
+import { loginNearWallet, isLoginNearWallet,getHighScore } from '../../init';
 
 export class MyScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -101,7 +101,7 @@ export class MyScene extends Phaser.Scene {
 
   create() {
     // 制限時間
-    this.timelimitDuration = 10000;
+    this.timelimitDuration = 20000;
     
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -119,8 +119,10 @@ export class MyScene extends Phaser.Scene {
     scoreCenter.on('update-score', this.updateScore, this);
     
     // ハイスコアのグローバル管理
-    
+    // console.log(getHighScore());
+    this.highScore = getHighScore() > this.highScore ? getHighScore() : this.highScore;
     this.registry.set({highScore: this.highScore}, 'highScore');
+
     // ハイスコア管理
     scoreCenter.on('update-highScore', this.updateHighScore, this)
 
@@ -245,7 +247,6 @@ export class MyScene extends Phaser.Scene {
     this.scoreScreen.displayScore(this.score);
     this.scoreScreen.displayHighScore(this.highScore);
     // scoreCenter.removeListener('update-score', this.updateScore, this);
-    console.log(this.registry)
   };
 
   timer(): void {
