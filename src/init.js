@@ -22,6 +22,8 @@ window.Buffer = buffer.Buffer;
     changeMethods: ['setGreeting'],
   })
 
+  window.highScore = await window.contract.getGreeting({ accountId: window.accountId });
+
   // window.walletConnection.signOut();
 })(window);
 
@@ -31,4 +33,8 @@ export function loginNearWallet() {
 
 export function isLoginNearWallet() {
   return window.walletConnection.isSignedIn();
+}
+
+export function getHighScore() {
+  return window.highScore || 0;
 }

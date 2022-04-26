@@ -1,3 +1,5 @@
+import { isLoginNearWallet } from '../../init';
+
 export class ScoreScreen {
   private image: Phaser.GameObjects.Image;
   private add: Phaser.GameObjects.GameObjectFactory;
@@ -112,8 +114,10 @@ export class ScoreScreen {
   displayAll() {
     this.image.visible = true;
     this.howToRestart.visible = true;
-    this.nearText0.visible = true;
-    this.nearText1.visible = true;
+    if ( isLoginNearWallet() ) {
+      this.nearText0.visible = true;
+      this.nearText1.visible = true;
+    }
   };
 
   hideAll() {

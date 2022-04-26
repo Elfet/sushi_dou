@@ -24,7 +24,7 @@ import npcMale2 from '../assets/characters/npc_male_2.png';
 import npcMale3 from '../assets/characters/npc_male_3.png';
 import bgm from '../assets/music-sound/game-bgm_0.ogg';
 
-import { loginNearWallet, isLoginNearWallet } from '../../init';
+import { loginNearWallet, isLoginNearWallet, getHighScore } from '../../init';
 
 export class MyScene extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -99,9 +99,9 @@ export class MyScene extends Phaser.Scene {
     this.load.audio('select_food', `${soundAssetsPath}/sound-select-food.mp3`);
   }
 
-  create() {
+  async create() {
     // 制限時間
-    this.timelimitDuration = 30000;
+    this.timelimitDuration = 10000;
     
     // Rキー
     this.RKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -119,6 +119,7 @@ export class MyScene extends Phaser.Scene {
     scoreCenter.on('update-score', this.updateScore, this);
     
      // ハイスコアのグローバル管理
+    this.highScore = getHighScore();
     this.registry.set({highScore: this.highScore}, 'highScore');
     // ハイスコア管理
     scoreCenter.on('update-highScore', this.updateHighScore, this)
@@ -169,7 +170,6 @@ export class MyScene extends Phaser.Scene {
 
     this.registry.set({isLogin: {near: isLoginNearWallet(), guest: this.isGuestLogin}} , 'isLogin');
     this.isLogin = this.registry.get('isLogin').near || this.registry.get('isLogin').guest
-    console.log(this.registry.get('isLogin'));
   }
 
   update () {
@@ -232,7 +232,7 @@ export class MyScene extends Phaser.Scene {
       this.music.stop();
       this.plugin.remove('gameScene');
       this.plugin.restart();
-    } else if (this.isNKeyPressed && this.plugin.isSleeping('gameScene')) {
+    } else if (isLoginNearWallet() && this.isNKeyPressed && this.plugin.isSleeping('gameScene')) {
       sendHighScore(this.highScore);
     }
   };
