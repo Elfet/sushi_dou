@@ -11,9 +11,9 @@
     "deploy:contract": "near deploy",
     "deploy:pages": "gh-pages -d dist/",
     "deploy": "npm run build && npm run deploy:contract && npm run deploy:pages",
-    "prestart": "npm run build:contract:debug && npm run dev:deploy:contract",
-    "start": "echo The app is starting! It will automatically open in your browser when ready && cd ./src/dist/ &&env-cmd -f ../../neardev/dev-account.env python -m http.server 8080",
-    "dev": "nodemon --watch contract --watch ebisen_clicker/dist -e ts --exec \"npm run start\"",
+    "prestart": "npm run build:contract:debug && npm run dev:deploy:contract && cd ./src/ && npm run build",
+    "start": "echo The app is starting! It will automatically open in your browser when ready && cd out/ && env-cmd -f ../neardev/dev-account.env python -m http.server 8080",
+    "dev": "nodemon --watch contract --watch src -e ts --exec \"npm run start\"",
     "test": "npm run build:contract:debug && cd contract && npm run test && cd .. && jest test --runInBand"
   },
   "devDependencies": {
