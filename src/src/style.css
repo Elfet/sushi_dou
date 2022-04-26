@@ -6,3 +6,17 @@
   color: #2c3e50;
   margin-top: 60px;
 }
+
+@font-face {
+  font-family: "font1";
+  src: url(/font/font4.ttf);
+}
+
+body {
+  background-color: black;
+  text-align:center;
+}
+
+canvas {
+  height: 70vh;
+}
