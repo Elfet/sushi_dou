@@ -1,5 +1,5 @@
 # SushiDou
----
+
 ## Description
 SushiDou is an HTML5 game and made for Gamedev.js Jam 2022, and by 2 developers(yuthon and Elfet).
 
@@ -17,7 +17,6 @@ You can login via game and save high score in your wallet. If you don't have a N
 It's deployed to 4everland.
 https://sushi_dou.4everland.app/
 
----
 ## Install & Build
 ```
 $ npm run build
