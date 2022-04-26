@@ -11,3 +11,12 @@
   font-family: "font1";
   src: url(/font/font4.ttf);
 }
+
+body {
+  background-color: black;
+  text-align:center;
+}
+
+canvas {
+  height: 70vh;
+}

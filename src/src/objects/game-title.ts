@@ -4,6 +4,7 @@ export class GameTitle {
   private controlExplanation!: Phaser.GameObjects.Text;
   private interactExplanation!: Phaser.GameObjects.Text;
   private howToStart!: Phaser.GameObjects.Text;
+  private loginExplanation!: Phaser.GameObjects.Text;
   
   constructor (
     add: Phaser.GameObjects.GameObjectFactory,
@@ -22,6 +23,7 @@ export class GameTitle {
     )
     this.gameExplanation.depth = 4;
     this.gameExplanation.setLineSpacing(10);
+    this.gameExplanation.visible = false;
 
     // プレイヤーの操作
     this.controlExplanation = add.text(
@@ -31,6 +33,7 @@ export class GameTitle {
       { fontFamily: 'font1', fontSize: '20px', color: 'white'}
     )
     this.controlExplanation.depth = 4;
+    this.controlExplanation.visible = false;
 
     // 食べ物の選択とオーダー提供
     this.interactExplanation = add.text(
@@ -40,6 +43,7 @@ export class GameTitle {
       { fontFamily: 'font1', fontSize: '20px', color: 'white'}
     )
     this.interactExplanation.depth = 4;
+    this.interactExplanation.visible = false;
 
     // ゲームスタート
     this.howToStart = add.text(
@@ -49,6 +53,7 @@ export class GameTitle {
       { fontFamily: 'font1', fontSize: '25px',color: 'white' }
     )
     this.howToStart.depth = 4;
+    this.howToStart.visible = false;
 
     // テキストの点滅
     tweens.timeline({
@@ -66,6 +71,14 @@ export class GameTitle {
         }
       ]
     })
+
+    this.loginExplanation = add.text(
+      135,
+      350,
+      'Play   with   Near   Wallet   :   Press   Q\n\n       Play   with   Guest   :   Press   E',
+      { fontFamily: 'font1', fontSize: '25px', color: 'white'}
+    )
+    this.loginExplanation.depth = 4;
   }
 
   hideAll() {
@@ -74,5 +87,17 @@ export class GameTitle {
     this.controlExplanation.visible = false;
     this.interactExplanation.visible = false;
     this.howToStart.visible = false;
+  }
+
+  showAll() {
+    this.image.visible = true;
+    this.gameExplanation.visible = true;
+    this.controlExplanation.visible = true;
+    this.interactExplanation.visible = true;
+    this.howToStart.visible = true;
+  }
+
+  hideLoginText() {
+    this.loginExplanation.visible = false;
   }
 }
