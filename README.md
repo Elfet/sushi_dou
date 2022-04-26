@@ -23,5 +23,3 @@ $ npm run build
 $ npm run dev
 ```
 access http://localhost:8080
-
-
