@@ -1,5 +1,7 @@
 # SushiDou
 
+### deployed at https://sushi_dou.4everland.app/
+
 ## Description
 SushiDou is an HTML5 game and made for Gamedev.js Jam 2022, and by 2 developers(yuthon and Elfet).
 
